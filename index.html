@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nail Kloset — ร้านทำเล็บสวย</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --rose:#D4847A;--rose-deep:#B5635A;--rose-light:#F2D5D2;
+  --cream:#FAF7F4;--cream2:#F0EBE6;
+  --dark:#1C1412;--mid:#5C4A46;--muted:#9C8A87;
+  --gold:#C9A96E;--gold-light:#EDD9A3;
+  --white:#FFFFFF;
+  --nav-h:72px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Sarabun',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(250,247,244,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,132,122,0.12);height:var(--nav-h);display:flex;align-items:center;transition:box-shadow 0.3s;}
+nav.scrolled{box-shadow:0 2px 24px rgba(28,20,18,0.08);}
+.nav-inner{max-width:1200px;margin:0 auto;width:100%;padding:0 32px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-mark{width:36px;height:36px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.nav-logo-mark svg{width:20px;height:20px;fill:#fff;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dark);letter-spacing:0.02em;}
+.nav-logo-text span{color:var(--rose);}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{text-decoration:none;color:var(--mid);font-size:15px;font-weight:400;transition:color 0.2s;letter-spacing:0.01em;}
+.nav-links a:hover{color:var(--rose);}
+.nav-book-btn{background:var(--rose);color:#fff;border:none;padding:12px 28px;border-radius:100px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:500;cursor:pointer;letter-spacing:0.04em;transition:background 0.2s,transform 0.15s;}
+.nav-book-btn:hover{background:var(--rose-deep);transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--dark);transition:all 0.3s;}
+.mobile-menu{display:none;position:fixed;top:var(--nav-h);left:0;right:0;background:var(--cream);border-bottom:1px solid var(--rose-light);padding:24px 32px;z-index:99;}
+.mobile-menu.open{display:block;}
+.mobile-menu a{display:block;padding:12px 0;color:var(--mid);text-decoration:none;font-size:16px;border-bottom:1px solid var(--cream2);}
+.mobile-menu a:last-child{border-bottom:none;}
+
+/* ── HERO ── */
+.hero{padding-top:var(--nav-h);min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#FAF7F4 0%,#F0EBE6 40%,#E8D8D5 100%);z-index:0;}
+.hero-decor{position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(212,132,122,0.15) 0%,transparent 70%);z-index:0;}
+.hero-inner{max-width:1200px;margin:0 auto;width:100%;padding:80px 32px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--rose-light);border-radius:100px;padding:8px 18px;margin-bottom:28px;}
+.hero-tag-dot{width:6px;height:6px;background:var(--rose);border-radius:50%;}
+.hero-tag-txt{font-size:13px;font-weight:500;color:var(--rose-deep);letter-spacing:0.06em;text-transform:uppercase;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,5vw,72px);font-weight:900;line-height:1.1;color:var(--dark);margin-bottom:24px;}
+.hero h1 em{font-style:italic;color:var(--rose);}
+.hero-sub{font-size:17px;color:var(--mid);line-height:1.8;max-width:460px;margin-bottom:44px;font-weight:300;}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;}
+.btn-primary{background:var(--rose);color:#fff;border:none;padding:16px 36px;border-radius:100px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:500;cursor:pointer;letter-spacing:0.04em;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:10px;}
+.btn-primary:hover{background:var(--rose-deep);transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,132,122,0.35);}
+.btn-outline{background:transparent;color:var(--dark);border:1.5px solid rgba(28,20,18,0.2);padding:14px 32px;border-radius:100px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:500;cursor:pointer;letter-spacing:0.04em;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+.btn-outline:hover{border-color:var(--rose);color:var(--rose);}
+.hero-stats{display:flex;gap:48px;margin-top:56px;padding-top:40px;border-top:1px solid rgba(28,20,18,0.08);}
+.hero-stat-num{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--dark);}
+.hero-stat-num span{color:var(--rose);}
+.hero-stat-lbl{font-size:13px;color:var(--muted);margin-top:4px;letter-spacing:0.02em;}
+.hero-visual{position:relative;}
+.hero-img-main{width:100%;aspect-ratio:3/4;border-radius:24px;object-fit:cover;background:var(--cream2);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-img-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#EDD9A3 0%,#E8B8B2 50%,#D4847A 100%);border-radius:24px;min-height:520px;}
+.hero-img-placeholder svg{width:120px;height:120px;fill:rgba(255,255,255,0.8);}
+.hero-img-placeholder p{color:rgba(255,255,255,0.9);font-size:16px;margin-top:16px;font-weight:400;}
+.hero-badge{position:absolute;left:-24px;bottom:80px;background:#fff;border-radius:16px;padding:16px 20px;box-shadow:0 8px 32px rgba(28,20,18,0.12);display:flex;align-items:center;gap:12px;min-width:200px;}
+.hero-badge-icon{width:44px;height:44px;background:var(--rose-light);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.hero-badge-txt{font-size:13px;font-weight:600;color:var(--dark);}
+.hero-badge-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── SECTION SHARED ── */
+section{padding:100px 0;}
+.container{max-width:1200px;margin:0 auto;padding:0 32px;}
+.section-tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--rose);margin-bottom:16px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.15;color:var(--dark);margin-bottom:16px;}
+.section-title em{font-style:italic;color:var(--rose);}
+.section-sub{font-size:16px;color:var(--mid);line-height:1.8;max-width:520px;font-weight:300;}
+.section-hd{margin-bottom:60px;}
+.section-hd.center{text-align:center;}
+.section-hd.center .section-sub{margin:0 auto;}
+
+/* ── SERVICES ── */
+#services{background:var(--white);}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:var(--cream2);}
+.svc-card{background:var(--white);padding:44px 36px;cursor:pointer;transition:all 0.3s;position:relative;overflow:hidden;}
+.svc-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--rose);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
+.svc-card:hover{background:var(--cream);}
+.svc-card:hover::before{transform:scaleX(1);}
+.svc-icon{width:56px;height:56px;background:var(--rose-light);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:26px;transition:background 0.3s;}
+.svc-card:hover .svc-icon{background:var(--rose);filter:brightness(1.1);}
+.svc-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--dark);margin-bottom:10px;}
+.svc-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.svc-price{font-size:14px;font-weight:600;color:var(--rose);}
+.svc-arrow{position:absolute;right:28px;top:44px;width:32px;height:32px;border:1px solid var(--cream2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;transition:all 0.3s;}
+.svc-card:hover .svc-arrow{background:var(--rose);border-color:var(--rose);color:#fff;}
+
+/* ── GALLERY ── */
+#gallery{background:var(--cream);}
+.gallery-filter{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
+.filter-btn{padding:10px 22px;border-radius:100px;border:1.5px solid var(--cream2);background:var(--white);font-family:'Sarabun',sans-serif;font-size:14px;color:var(--mid);cursor:pointer;transition:all 0.2s;font-weight:400;}
+.filter-btn.active{background:var(--rose);border-color:var(--rose);color:#fff;}
+.filter-btn:hover:not(.active){border-color:var(--rose);color:var(--rose);}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.gallery-item{position:relative;border-radius:16px;overflow:hidden;cursor:pointer;group;}
+.gallery-item:nth-child(3n+1):nth-last-child(-n+3):first-child,.gallery-item.wide{grid-column:span 2;}
+.gallery-thumb{width:100%;aspect-ratio:1;object-fit:cover;background:var(--cream2);display:flex;align-items:center;justify-content:center;transition:transform 0.4s;}
+.gallery-item:hover .gallery-thumb{transform:scale(1.04);}
+.gallery-placeholder{width:100%;height:100%;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;color:var(--muted);}
+.gallery-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,20,18,0.7) 0%,transparent 60%);opacity:0;transition:opacity 0.3s;display:flex;align-items:flex-end;padding:20px;}
+.gallery-item:hover .gallery-overlay{opacity:1;}
+.gallery-label{color:#fff;font-size:14px;font-weight:500;}
+.gallery-item.tall{grid-row:span 2;}
+.gallery-item.tall .gallery-placeholder{min-height:456px;}
+
+/* ── PROMOTIONS ── */
+#promotions{background:var(--white);}
+.promo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+.promo-card{background:var(--cream);border-radius:20px;overflow:hidden;position:relative;transition:transform 0.3s,box-shadow 0.3s;}
+.promo-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(28,20,18,0.1);}
+.promo-badge{position:absolute;top:16px;right:16px;background:var(--rose);color:#fff;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:6px 14px;border-radius:100px;}
+.promo-badge.gold{background:var(--gold);}
+.promo-badge.new{background:#2D9B6F;}
+.promo-img{height:180px;background:linear-gradient(135deg,var(--gold-light),var(--rose-light));display:flex;align-items:center;justify-content:center;font-size:64px;}
+.promo-body{padding:24px;}
+.promo-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:8px;}
+.promo-desc{font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:16px;}
+.promo-footer{display:flex;align-items:center;justify-content:space-between;}
+.promo-price{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--rose);}
+.promo-old{font-size:13px;color:var(--muted);text-decoration:line-through;margin-left:8px;}
+.promo-expire{font-size:12px;color:var(--muted);}
+.promo-btn{padding:10px 22px;background:var(--rose);color:#fff;border:none;border-radius:100px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background 0.2s;}
+.promo-btn:hover{background:var(--rose-deep);}
+
+/* ── BOOKING ── */
+#booking{background:linear-gradient(135deg,#1C1412 0%,#3A2420 100%);color:#fff;padding:100px 0;}
+.booking-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.booking-info .section-tag{color:var(--gold-light);}
+.booking-info .section-title{color:#fff;}
+.booking-info .section-sub{color:rgba(255,255,255,0.6);}
+.booking-features{list-style:none;margin-top:32px;display:flex;flex-direction:column;gap:16px;}
+.booking-features li{display:flex;align-items:center;gap:12px;color:rgba(255,255,255,0.8);font-size:15px;}
+.booking-features li::before{content:'';width:20px;height:20px;border-radius:50%;background:rgba(212,132,122,0.2);border:1.5px solid var(--rose);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23D4847A' stroke-width='2.5'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");background-size:12px;background-repeat:no-repeat;background-position:center;}
+.booking-form{background:rgba(255,255,255,0.05);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;}
+.form-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:32px;}
+.form-group{margin-bottom:20px;}
+.form-label{display:block;font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:8px;letter-spacing:0.04em;text-transform:uppercase;}
+.form-input,.form-select,.form-textarea{width:100%;padding:14px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;color:#fff;font-family:'Sarabun',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,0.3);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--rose);}
+.form-select option{background:#2C1A18;color:#fff;}
+.form-textarea{resize:none;height:100px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-submit{width:100%;padding:16px;background:var(--rose);border:none;border-radius:12px;color:#fff;font-family:'Sarabun',sans-serif;font-size:16px;font-weight:500;cursor:pointer;letter-spacing:0.04em;margin-top:8px;transition:background 0.2s,transform 0.15s;}
+.form-submit:hover{background:var(--rose-deep);transform:translateY(-1px);}
+.form-note{text-align:center;font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;}
+
+/* ── SUCCESS TOAST ── */
+.toast{position:fixed;bottom:32px;right:32px;background:#fff;border-radius:16px;padding:20px 24px;box-shadow:0 8px 40px rgba(0,0,0,0.15);display:flex;align-items:center;gap:16px;transform:translateY(120px);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);z-index:999;min-width:280px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{width:40px;height:40px;background:#E8F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.toast-txt{font-size:14px;font-weight:600;color:var(--dark);}
+.toast-sub{font-size:13px;color:var(--muted);}
+
+/* ── CONTACT / MAP ── */
+#contact{background:var(--cream2);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.contact-info{display:flex;flex-direction:column;gap:24px;}
+.contact-item{display:flex;gap:16px;}
+.contact-item-icon{width:44px;height:44px;background:var(--white);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 2px 8px rgba(28,20,18,0.06);}
+.contact-item-lbl{font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.contact-item-val{font-size:15px;color:var(--dark);line-height:1.6;}
+.map-frame{width:100%;height:380px;border-radius:20px;overflow:hidden;background:var(--cream);border:none;display:flex;align-items:center;justify-content:center;color:var(--muted);}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:48px;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:12px;}
+.footer-brand span{color:var(--rose);}
+.footer-tagline{font-size:14px;line-height:1.7;max-width:280px;}
+.footer-heading{font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;transition:color 0.2s;}
+.footer-links a:hover{color:#fff;}
+.footer-social{display:flex;gap:12px;margin-top:24px;}
+.social-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background 0.2s;text-decoration:none;}
+.social-btn:hover{background:var(--rose);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.admin-link{color:rgba(255,255,255,0.25);text-decoration:none;font-size:12px;transition:color 0.2s;}
+.admin-link:hover{color:rgba(255,255,255,0.5);}
+
+/* ── ADMIN PANEL ── */
+.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;overflow-y:auto;padding:40px 20px;}
+.admin-overlay.open{display:block;}
+.admin-panel{background:var(--white);border-radius:24px;max-width:860px;margin:0 auto;overflow:hidden;}
+.admin-top{background:var(--dark);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;}
+.admin-top-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;}
+.admin-top-title span{color:var(--rose);}
+.admin-close{background:rgba(255,255,255,0.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;transition:background 0.2s;}
+.admin-close:hover{background:rgba(255,255,255,0.2);}
+.admin-tabs{display:flex;border-bottom:1px solid var(--cream2);background:var(--cream);}
+.admin-tab{padding:16px 24px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;transition:all 0.2s;}
+.admin-tab.active{color:var(--rose);border-bottom-color:var(--rose);background:var(--white);}
+.admin-body{padding:32px;}
+.admin-section{display:none;}
+.admin-section.active{display:block;}
+.admin-section-title{font-size:18px;font-weight:600;color:var(--dark);margin-bottom:24px;}
+.promo-list{display:flex;flex-direction:column;gap:12px;}
+.promo-admin-item{background:var(--cream);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:16px;}
+.promo-admin-item .promo-admin-icon{font-size:28px;width:52px;height:52px;background:var(--white);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.promo-admin-info{flex:1;}
+.promo-admin-name{font-size:15px;font-weight:600;color:var(--dark);}
+.promo-admin-price{font-size:13px;color:var(--muted);margin-top:3px;}
+.promo-admin-actions{display:flex;gap:8px;}
+.admin-btn{padding:8px 16px;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;cursor:pointer;border:none;font-weight:500;transition:all 0.2s;}
+.admin-btn.edit{background:var(--rose-light);color:var(--rose-deep);}
+.admin-btn.edit:hover{background:var(--rose);color:#fff;}
+.admin-btn.del{background:#FEE2E2;color:#B91C1C;}
+.admin-btn.del:hover{background:#B91C1C;color:#fff;}
+.admin-btn.save{background:var(--rose);color:#fff;}
+.admin-btn.save:hover{background:var(--rose-deep);}
+.admin-btn.add{background:var(--dark);color:#fff;padding:10px 20px;}
+.admin-btn.add:hover{background:var(--rose);}
+.admin-add-form{background:var(--cream2);border-radius:14px;padding:24px;margin-top:20px;}
+.admin-add-form.hidden{display:none;}
+.admin-form-title{font-size:15px;font-weight:600;color:var(--dark);margin-bottom:16px;}
+.af-group{margin-bottom:14px;}
+.af-label{display:block;font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.af-input,.af-select,.af-textarea{width:100%;padding:12px 14px;background:var(--white);border:1.5px solid var(--cream2);border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;color:var(--dark);outline:none;transition:border-color 0.2s;}
+.af-input:focus,.af-select:focus,.af-textarea:focus{border-color:var(--rose);}
+.af-textarea{height:80px;resize:none;}
+.af-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--cream2);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-lbl{font-size:14px;color:var(--dark);}
+.toggle-sub{font-size:12px;color:var(--muted);}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{display:none;}
+.toggle-slider{position:absolute;inset:0;background:var(--cream2);border-radius:100px;cursor:pointer;transition:background 0.2s;}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.15);}
+.toggle input:checked+.toggle-slider{background:var(--rose);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px);}
+.booking-list{display:flex;flex-direction:column;gap:10px;}
+.booking-admin-item{background:var(--cream);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;}
+.booking-status{padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;}
+.booking-status.pending{background:#FEF3C7;color:#92400E;}
+.booking-status.confirmed{background:#D1FAE5;color:#065F46;}
+.booking-status.done{background:var(--cream2);color:var(--muted);}
+.booking-admin-info{flex:1;}
+.booking-admin-name{font-size:14px;font-weight:600;color:var(--dark);}
+.booking-admin-detail{font-size:12px;color:var(--muted);margin-top:2px;}
+.admin-login{padding:40px;text-align:center;}
+.admin-login input{margin-bottom:12px;}
+.admin-login-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--dark);margin-bottom:8px;}
+.admin-login-sub{font-size:14px;color:var(--muted);margin-bottom:28px;}
+.admin-input-lg{width:100%;padding:14px 16px;border:1.5px solid var(--cream2);border-radius:12px;font-family:'Sarabun',sans-serif;font-size:15px;color:var(--dark);outline:none;margin-bottom:12px;transition:border-color 0.2s;}
+.admin-input-lg:focus{border-color:var(--rose);}
+.admin-login-btn{width:100%;padding:14px;background:var(--dark);color:#fff;border:none;border-radius:12px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:background 0.2s;}
+.admin-login-btn:hover{background:var(--rose);}
+.admin-err{font-size:13px;color:#B91C1C;margin-top:8px;display:none;}
+.admin-err.show{display:block;}
+
+/* ── LIGHTBOX ── */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:600;align-items:center;justify-content:center;padding:40px;}
+.lightbox.open{display:flex;}
+.lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:28px;cursor:pointer;background:none;border:none;opacity:0.7;transition:opacity 0.2s;}
+.lightbox-close:hover{opacity:1;}
+.lightbox-img{max-width:80vw;max-height:80vh;border-radius:12px;background:var(--cream2);display:flex;align-items:center;justify-content:center;padding:60px;font-size:18px;color:var(--muted);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-inner,.booking-inner,.contact-grid,.footer-inner{grid-template-columns:1fr;gap:48px;}
+  .hero-visual{order:-1;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+  .gallery-item.wide,.gallery-item.tall{grid-column:span 1;grid-row:span 1;}
+  .gallery-item.tall .gallery-placeholder{min-height:220px;}
+  .nav-links,.nav-book-btn{display:none;}
+  .hamburger{display:flex;}
+  .form-row{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr;}
+  .hero-badge{display:none;}
+  .hero-stats{gap:24px;}
+  .admin-tabs{overflow-x:auto;}
+}
+@media(max-width:640px){
+  section{padding:64px 0;}
+  .container{padding:0 20px;}
+  .gallery-grid{grid-template-columns:1fr 1fr;}
+  .promo-grid{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
+  .admin-body{padding:20px;}
+  .af-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 7 4 7 7c0 2 1 3.5 2.5 4.5C7 13 5.5 15.5 5.5 18.5c0 2 1 3.5 2.5 3.5h8c1.5 0 2.5-1.5 2.5-3.5 0-3-1.5-5.5-4-7C15.5 10.5 17 9 17 7c0-3-2.5-5-5-5z"/></svg>
+      </div>
+      <div class="nav-logo-text">Nail <span>Kloset</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="#services">บริการ</a>
+      <a href="#gallery">ผลงาน</a>
+      <a href="#promotions">โปรโมชั่น</a>
+      <a href="#contact">ติดต่อ</a>
+    </div>
+    <button class="nav-book-btn" onclick="scrollToBooking()">จองคิว →</button>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#services" onclick="toggleMenu()">บริการ</a>
+  <a href="#gallery" onclick="toggleMenu()">ผลงาน</a>
+  <a href="#promotions" onclick="toggleMenu()">โปรโมชั่น</a>
+  <a href="#contact" onclick="toggleMenu()">ติดต่อ</a>
+  <a href="#booking" onclick="toggleMenu()">จองคิว</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-decor"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <div class="hero-tag-dot"></div>
+        <span class="hero-tag-txt">Premium Nail Studio</span>
+      </div>
+      <h1>ความงาม<br>ที่ <em>ปลายนิ้ว</em><br>ของคุณ</h1>
+      <p class="hero-sub">ร้านทำเล็บพรีเมียม บริการครบวงจร ทั้งทำเล็บ ต่อขนตา สปามือเท้า และแว็กขน โดยทีมช่างมืออาชีพ</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="scrollToBooking()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          จองคิวออนไลน์
+        </button>
+        <a href="#gallery" class="btn-outline">ดูผลงาน →</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">5<span>K+</span></div>
+          <div class="hero-stat-lbl">ลูกค้าพึงพอใจ</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">3<span>ปี</span></div>
+          <div class="hero-stat-lbl">ประสบการณ์</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">4.9<span>★</span></div>
+          <div class="hero-stat-lbl">คะแนนรีวิว</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-main">
+        <div class="hero-img-placeholder">
+          <svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 7 4 7 7c0 2 1 3.5 2.5 4.5C7 13 5.5 15.5 5.5 18.5c0 2 1 3.5 2.5 3.5h8c1.5 0 2.5-1.5 2.5-3.5 0-3-1.5-5.5-4-7C15.5 10.5 17 9 17 7c0-3-2.5-5-5-5z"/></svg>
+          <p>รูปหน้าร้าน / ผลงาน</p>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon">✨</div>
+        <div>
+          <div class="hero-badge-txt">Open Now</div>
+          <div class="hero-badge-sub">10:00 — 20:00 น.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-hd">
+      <div class="section-tag">บริการของเรา</div>
+      <h2 class="section-title">ครบ จบ ใน<br>ที่เดียว <em>— Nail Kloset</em></h2>
+      <p class="section-sub">บริการทุกอย่างภายใต้หลังคาเดียว ด้วยวัสดุคุณภาพและช่างที่ผ่านการฝึกอบรม</p>
+    </div>
+    <div class="services-grid" id="services-grid">
+      <div class="svc-card" onclick="scrollToBooking()">
+        <div class="svc-icon">💅</div>
+        <div class="svc-arrow">→</div>
+        <div class="svc-name">ทำเล็บ</div>
+        <p class="svc-desc">ทั้งเจล อะคริลิค และ Soft Gel พร้อม nail art ตามสั่ง หลากหลายลาย</p>
+        <div class="svc-price">เริ่มต้น ฿300</div>
+      </div>
+      <div class="svc-card" onclick="scrollToBooking()">
+        <div class="svc-icon">✨</div>
+        <div class="svc-arrow">→</div>
+        <div class="svc-name">ต่อขนตา</div>
+        <p class="svc-desc">Classic, Volume, Mega Volume ด้วย lash premium นำเข้า ไม่ระคายเคืองตา</p>
+        <div class="svc-price">เริ่มต้น ฿600</div>
+      </div>
+      <div class="svc-card" onclick="scrollToBooking()">
+        <div class="svc-icon">💆</div>
+        <div class="svc-arrow">→</div>
+        <div class="svc-name">สปามือ / เท้า</div>
+        <p class="svc-desc">นวดและขัดผิว บำรุงมือเท้าให้อ่อนนุ่ม ด้วย scrub และ mask นำเข้า</p>
+        <div class="svc-price">เริ่มต้น ฿350</div>
+      </div>
+      <div class="svc-card" onclick="scrollToBooking()">
+        <div class="svc-icon">🪮</div>
+        <div class="svc-arrow">→</div>
+        <div class="svc-name">แว็กขน</div>
+        <p class="svc-desc">แว็กซ์ขนทุกส่วนด้วย hard wax คุณภาพสูง เจ็บน้อย ผิวเนียน</p>
+        <div class="svc-price">เริ่มต้น ฿150</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-hd center">
+      <div class="section-tag">ผลงานของเรา</div>
+      <h2 class="section-title">ผลงานที่ <em>ภูมิใจ</em></h2>
+      <p class="section-sub">ทุกชิ้นงานคือความตั้งใจและความพิถีพิถัน ของช่างทุกคนใน Nail Kloset</p>
+    </div>
+    <div class="gallery-filter">
+      <button class="filter-btn active" onclick="filterGallery('all',this)">ทั้งหมด</button>
+      <button class="filter-btn" onclick="filterGallery('nail',this)">ทำเล็บ</button>
+      <button class="filter-btn" onclick="filterGallery('lash',this)">ต่อขนตา</button>
+      <button class="filter-btn" onclick="filterGallery('spa',this)">สปา</button>
+    </div>
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- PROMOTIONS -->
+<section id="promotions">
+  <div class="container">
+    <div class="section-hd">
+      <div class="section-tag">โปรโมชั่น</div>
+      <h2 class="section-title">ดีลพิเศษ<br><em>เฉพาะคุณ</em></h2>
+      <p class="section-sub">อัปเดตโปรโมชั่นใหม่ทุกเดือน อย่าพลาด</p>
+    </div>
+    <div class="promo-grid" id="promo-grid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="container">
+    <div class="booking-inner">
+      <div class="booking-info">
+        <div class="section-tag">นัดหมาย</div>
+        <h2 class="section-title" style="color:#fff;">จองคิว<br><em>ง่ายๆ</em> ใน<br>ไม่กี่คลิก</h2>
+        <p class="section-sub">กรอกข้อมูลง่ายๆ เราจะโทรยืนยันคิวภายใน 30 นาที</p>
+        <ul class="booking-features">
+          <li>ไม่ต้องเสียเวลารอคิวหน้าร้าน</li>
+          <li>เลือกบริการและช่างที่ต้องการ</li>
+          <li>ยืนยันคิวผ่าน LINE / โทรศัพท์</li>
+          <li>ยกเลิกหรือเลื่อนนัดได้ล่วงหน้า 24 ชม.</li>
+        </ul>
+      </div>
+      <div class="booking-form" id="booking-form">
+        <div class="form-title">จองคิว</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">ชื่อ - นามสกุล</label>
+            <input class="form-input" type="text" placeholder="ชื่อของคุณ" id="b-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">เบอร์โทรศัพท์</label>
+            <input class="form-input" type="tel" placeholder="0XX-XXX-XXXX" id="b-phone">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">บริการที่ต้องการ</label>
+          <select class="form-select" id="b-service">
+            <option value="">เลือกบริการ</option>
+            <option>ทำเล็บ</option>
+            <option>ต่อขนตา</option>
+            <option>สปามือ / เท้า</option>
+            <option>แว็กขน</option>
+            <option>หลายบริการ</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">วันที่</label>
+            <input class="form-input" type="date" id="b-date">
+          </div>
+          <div class="form-group">
+            <label class="form-label">เวลาประมาณ</label>
+            <select class="form-select" id="b-time">
+              <option>10:00</option><option>11:00</option><option>12:00</option>
+              <option>13:00</option><option>14:00</option><option>15:00</option>
+              <option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">หมายเหตุ (ไม่บังคับ)</label>
+          <textarea class="form-textarea" placeholder="เช่น ลาย ดีไซน์ หรือความต้องการพิเศษ..." id="b-note"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitBooking()">ส่งคำจองคิว →</button>
+        <p class="form-note">เราจะติดต่อกลับเพื่อยืนยันคิวภายใน 30 นาที</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-hd">
+      <div class="section-tag">ติดต่อเรา</div>
+      <h2 class="section-title">หาเราเจอ<br>ได้ที่ <em>นี่</em></h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div>
+            <div class="contact-item-lbl">ที่อยู่</div>
+            <div class="contact-item-val">Nail Kloset<br>ตำบลในเมือง อำเภอเมือง<br>นครราชสีมา 30000</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🕐</div>
+          <div>
+            <div class="contact-item-lbl">เวลาทำการ</div>
+            <div class="contact-item-val">จันทร์ — เสาร์: 10:00 — 20:00 น.<br>อาทิตย์: 10:00 — 18:00 น.</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📱</div>
+          <div>
+            <div class="contact-item-lbl">ติดต่อ</div>
+            <div class="contact-item-val">โทร: 0XX-XXX-XXXX<br>LINE: @nailkloset</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">💳</div>
+          <div>
+            <div class="contact-item-lbl">การชำระเงิน</div>
+            <div class="contact-item-val">เงินสด · โอน · บัตรเครดิต<br>สมาชิก Nail Kloset Card</div>
+          </div>
+        </div>
+      </div>
+      <div class="map-frame">
+        <div style="text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🗺️</div>
+          <div style="font-size:14px;">แผนที่ร้าน Nail Kloset</div>
+          <div style="font-size:12px;margin-top:4px;color:var(--muted);">ใส่ Google Maps embed ได้เลย</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">Nail <span>Kloset</span></div>
+        <p class="footer-tagline">ร้านทำเล็บพรีเมียม บริการครบวงจร ด้วยมาตรฐานความสะอาดและวัสดุคุณภาพสูง</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn">f</a>
+          <a href="#" class="social-btn">ig</a>
+          <a href="#" class="social-btn">L</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">บริการ</div>
+        <ul class="footer-links">
+          <li><a href="#services">ทำเล็บ</a></li>
+          <li><a href="#services">ต่อขนตา</a></li>
+          <li><a href="#services">สปามือ / เท้า</a></li>
+          <li><a href="#services">แว็กขน</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">ลิงก์</div>
+        <ul class="footer-links">
+          <li><a href="#gallery">ผลงาน</a></li>
+          <li><a href="#promotions">โปรโมชั่น</a></li>
+          <li><a href="#booking">จองคิว</a></li>
+          <li><a href="#contact">ติดต่อ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2025 Nail Kloset. All rights reserved.</div>
+      <a href="#" class="admin-link" onclick="openAdmin(event)">⚙ Admin</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="admin-overlay">
+  <div class="admin-panel">
+    <div class="admin-top">
+      <div class="admin-top-title">Nail <span>Kloset</span> — Admin</div>
+      <button class="admin-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="admin-login-screen">
+      <div class="admin-login">
+        <div class="admin-login-title">เข้าสู่ระบบหลังบ้าน</div>
+        <p class="admin-login-sub">สำหรับเจ้าของร้านเท่านั้น</p>
+        <input class="admin-input-lg" type="password" placeholder="รหัสผ่าน" id="admin-pass" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="admin-login-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+        <div class="admin-err" id="admin-err">รหัสผ่านไม่ถูกต้อง</div>
+      </div>
+    </div>
+    <!-- PANEL -->
+    <div id="admin-main-screen" style="display:none;">
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchAdminTab('promos',this)">โปรโมชั่น</button>
+        <button class="admin-tab" onclick="switchAdminTab('bookings',this)">คิวจอง</button>
+        <button class="admin-tab" onclick="switchAdminTab('gallery-admin',this)">ผลงาน</button>
+        <button class="admin-tab" onclick="switchAdminTab('settings',this)">ตั้งค่า</button>
+      </div>
+
+      <!-- PROMOS TAB -->
+      <div class="admin-body">
+        <div class="admin-section active" id="tab-promos">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+            <div class="admin-section-title" style="margin-bottom:0;">จัดการโปรโมชั่น</div>
+            <button class="admin-btn add" onclick="toggleAddPromoForm()">+ เพิ่มโปรโมชั่น</button>
+          </div>
+
+          <div class="admin-add-form hidden" id="add-promo-form">
+            <div class="admin-form-title">โปรโมชั่นใหม่</div>
+            <div class="af-row">
+              <div class="af-group">
+                <label class="af-label">ชื่อโปรโมชั่น</label>
+                <input class="af-input" type="text" id="nf-title" placeholder="เช่น Happy Hour">
+              </div>
+              <div class="af-group">
+                <label class="af-label">ประเภท Badge</label>
+                <select class="af-select" id="nf-badge-type">
+                  <option value="">ไม่มี</option>
+                  <option value="hot">Hot Deal</option>
+                  <option value="new">ใหม่</option>
+                  <option value="gold">พรีเมียม</option>
+                </select>
+              </div>
+            </div>
+            <div class="af-group">
+              <label class="af-label">คำอธิบาย</label>
+              <textarea class="af-textarea" id="nf-desc" placeholder="รายละเอียดโปรโมชั่น..."></textarea>
+            </div>
+            <div class="af-row">
+              <div class="af-group">
+                <label class="af-label">ราคาปกติ (฿)</label>
+                <input class="af-input" type="number" id="nf-old-price" placeholder="0">
+              </div>
+              <div class="af-group">
+                <label class="af-label">ราคาโปร (฿)</label>
+                <input class="af-input" type="number" id="nf-price" placeholder="0">
+              </div>
+            </div>
+            <div class="af-row">
+              <div class="af-group">
+                <label class="af-label">ไอคอน (emoji)</label>
+                <input class="af-input" type="text" id="nf-icon" placeholder="💅" maxlength="4">
+              </div>
+              <div class="af-group">
+                <label class="af-label">วันหมดอายุ</label>
+                <input class="af-input" type="date" id="nf-expire">
+              </div>
+            </div>
+            <button class="admin-btn save" onclick="addPromo()" style="width:100%;padding:12px;margin-top:8px;font-size:14px;">บันทึกโปรโมชั่น</button>
+          </div>
+
+          <div class="promo-list" id="admin-promo-list"></div>
+        </div>
+
+        <!-- BOOKINGS TAB -->
+        <div class="admin-section" id="tab-bookings">
+          <div class="admin-section-title">คิวจองวันนี้</div>
+          <div class="booking-list" id="admin-booking-list"></div>
+        </div>
+
+        <!-- GALLERY ADMIN TAB -->
+        <div class="admin-section" id="tab-gallery-admin">
+          <div class="admin-section-title" style="margin-bottom:8px;">จัดการผลงาน</div>
+          <p style="font-size:14px;color:var(--muted);margin-bottom:20px;">อัปโหลดรูปผลงานเพื่อแสดงในหน้าเว็บ (ใส่ URL รูปได้เลย)</p>
+          <div class="admin-add-form" style="margin-bottom:20px;">
+            <div class="af-row">
+              <div class="af-group">
+                <label class="af-label">URL รูปภาพ</label>
+                <input class="af-input" type="url" id="g-url" placeholder="https://...">
+              </div>
+              <div class="af-group">
+                <label class="af-label">หมวดหมู่</label>
+                <select class="af-select" id="g-cat">
+                  <option value="nail">ทำเล็บ</option>
+                  <option value="lash">ต่อขนตา</option>
+                  <option value="spa">สปา</option>
+                </select>
+              </div>
+            </div>
+            <div class="af-group">
+              <label class="af-label">ชื่อ / คำอธิบาย</label>
+              <input class="af-input" type="text" id="g-label" placeholder="เช่น Marble Nail Art">
+            </div>
+            <button class="admin-btn save" onclick="addGalleryItem()" style="width:100%;padding:12px;margin-top:8px;">เพิ่มรูปผลงาน</button>
+          </div>
+          <div id="admin-gallery-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div class="admin-section" id="tab-settings">
+          <div class="admin-section-title">ตั้งค่าร้าน</div>
+          <div class="toggle-row">
+            <div><div class="toggle-lbl">รับจองออนไลน์</div><div class="toggle-sub">เปิด/ปิดระบบจองคิวผ่านเว็บ</div></div>
+            <label class="toggle"><input type="checkbox" checked id="t-booking"><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-lbl">แสดงโปรโมชั่น</div><div class="toggle-sub">แสดง/ซ่อนส่วนโปรโมชั่นในหน้าเว็บ</div></div>
+            <label class="toggle"><input type="checkbox" checked id="t-promos"><div class="toggle-slider"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-lbl">แจ้งเตือน LINE</div><div class="toggle-sub">ส่ง notify เมื่อมีคำจองใหม่</div></div>
+            <label class="toggle"><input type="checkbox" id="t-line"><div class="toggle-slider"></div></label>
+          </div>
+          <div style="margin-top:24px;">
+            <div class="af-group">
+              <label class="af-label">เปลี่ยนรหัสผ่าน Admin</label>
+              <input class="af-input" type="password" id="new-pass" placeholder="รหัสผ่านใหม่">
+            </div>
+            <button class="admin-btn save" onclick="changePass()" style="padding:10px 24px;">บันทึก</button>
+          </div>
+          <div style="margin-top:20px;padding:16px;background:var(--cream);border-radius:12px;font-size:13px;color:var(--muted);">
+            <strong style="color:var(--dark);">หมายเหตุ:</strong> ข้อมูลในเดโมนี้บันทึกใน localStorage ของเบราว์เซอร์ สำหรับการใช้งานจริงควรเชื่อมต่อ Google Sheets หรือ Database
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-img" id="lightbox-img">รูปภาพผลงาน</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✅</div>
+  <div>
+    <div class="toast-txt" id="toast-txt">ส่งคำจองสำเร็จ!</div>
+    <div class="toast-sub" id="toast-sub">เราจะโทรยืนยันภายใน 30 นาที</div>
+  </div>
+</div>
+
+<script>
+// ── DATA STORE (localStorage) ──
+const PASS_KEY='nk_admin_pass', PROMOS_KEY='nk_promos', BOOKINGS_KEY='nk_bookings', GALLERY_KEY='nk_gallery';
+const DEFAULT_PASS='nail2025';
+
+function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+// Default promotions
+const DEFAULT_PROMOS=[
+  {id:1,icon:'💅',title:'Happy Hour เล็บ',desc:'ทำเล็บเจลทุกแบบ ลด 20% เฉพาะช่วง 10:00-12:00 น. วันจันทร์-ศุกร์',price:240,oldPrice:300,badge:'hot',expire:'2025-12-31'},
+  {id:2,icon:'✨',title:'ต่อขนตา Classic Set',desc:'ต่อขนตา Classic พร้อมฟรี! บำรุงขนตาราคาพิเศษ สำหรับลูกค้าใหม่',price:490,oldPrice:650,badge:'new',expire:'2025-08-31'},
+  {id:3,icon:'💆',title:'Spa Duo Package',desc:'สปามือ + สปาเท้า คู่กัน พร้อม mask บำรุงผิว ราคาพิเศษ',price:600,oldPrice:800,badge:'gold',expire:'2025-09-30'},
+];
+
+// Default gallery items
+const DEFAULT_GALLERY=[
+  {id:1,url:'',cat:'nail',label:'French Gel Nail'},
+  {id:2,url:'',cat:'nail',label:'Marble Art'},
+  {id:3,url:'',cat:'lash',label:'Classic Lash Set'},
+  {id:4,url:'',cat:'nail',label:'Ombre Gradient'},
+  {id:5,url:'',cat:'spa',label:'Spa Luxury'},
+  {id:6,url:'',cat:'lash',label:'Volume Lash'},
+];
+
+let promos=load(PROMOS_KEY,DEFAULT_PROMOS);
+let bookings=load(BOOKINGS_KEY,[]);
+let gallery=load(GALLERY_KEY,DEFAULT_GALLERY);
+let addPromoOpen=false;
+
+// Gallery colors for placeholders
+const galColors=[
+  ['#EDD9A3','#D4847A'],['#D4847A','#9C8A87'],['#B5D4F4','#5C4A46'],
+  ['#E8D8D5','#C9A96E'],['#D1FAE5','#5C4A46'],['#F2D5D2','#B5635A'],
+];
+
+// ── INIT ──
+function init(){
+  setMinDate();
+  renderPromos();
+  renderGallery('all');
+  renderAdminPromos();
+  renderAdminBookings();
+  renderAdminGallery();
+}
+
+function setMinDate(){
+  const inp=document.getElementById('b-date');
+  const today=new Date().toISOString().split('T')[0];
+  inp.min=today;inp.value=today;
+}
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+});
+
+function toggleMenu(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+function scrollToBooking(){
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+}
+
+// ── GALLERY ──
+function renderGallery(filter){
+  const grid=document.getElementById('gallery-grid');
+  const items=filter==='all'?gallery:gallery.filter(i=>i.cat===filter);
+  grid.innerHTML='';
+  items.forEach((item,idx)=>{
+    const div=document.createElement('div');
+    div.className='gallery-item';
+    if(idx===0)div.classList.add('wide');
+    if(idx===1)div.classList.add('tall');
+    const [c1,c2]=galColors[idx%galColors.length];
+    const inner=item.url
+      ?`<img src="${item.url}" alt="${item.label}" style="width:100%;height:100%;object-fit:cover;">`
+      :`<div class="gallery-placeholder" style="background:linear-gradient(135deg,${c1},${c2})"><div style="font-size:40px;opacity:0.7">💅</div><div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:8px">${item.label}</div></div>`;
+    div.innerHTML=`${inner}<div class="gallery-overlay"><div class="gallery-label">${item.label}</div></div>`;
+    div.onclick=()=>openLightbox(item);
+    grid.appendChild(div);
+  });
+  if(!items.length)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">ยังไม่มีผลงานในหมวดนี้</div>';
+}
+
+function filterGallery(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGallery(cat);
+}
+
+// ── PROMOTIONS ──
+const badgeClass={hot:'',gold:'gold',new:'new'};
+const badgeText={hot:'Hot Deal',gold:'Premium',new:'New'};
+
+function renderPromos(){
+  const grid=document.getElementById('promo-grid');
+  grid.innerHTML='';
+  promos.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='promo-card';
+    const [c1,c2]=galColors[promos.indexOf(p)%galColors.length];
+    const badge=p.badge?`<div class="promo-badge ${badgeClass[p.badge]||''}">${badgeText[p.badge]||''}</div>`:'';
+    const oldP=p.oldPrice?`<span class="promo-old">฿${Number(p.oldPrice).toLocaleString()}</span>`:'';
+    const exp=p.expire?`<div class="promo-expire">ถึง ${formatDate(p.expire)}</div>`:'';
+    card.innerHTML=`${badge}<div class="promo-img" style="background:linear-gradient(135deg,${c1},${c2})">${p.icon||'💅'}</div><div class="promo-body"><div class="promo-title">${p.title}</div><p class="promo-desc">${p.desc}</p><div class="promo-footer"><div><div><span class="promo-price">฿${Number(p.price).toLocaleString()}</span>${oldP}</div>${exp}</div><button class="promo-btn" onclick="scrollToBooking()">จองเลย</button></div></div>`;
+    grid.appendChild(card);
+  });
+  if(!promos.length)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">ยังไม่มีโปรโมชั่น</div>';
+}
+
+function formatDate(d){
+  if(!d)return'';
+  const dt=new Date(d);
+  const m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()+543}`;
+}
+
+// ── BOOKING ──
+function submitBooking(){
+  const name=document.getElementById('b-name').value.trim();
+  const phone=document.getElementById('b-phone').value.trim();
+  const service=document.getElementById('b-service').value;
+  const date=document.getElementById('b-date').value;
+  const time=document.getElementById('b-time').value;
+  const note=document.getElementById('b-note').value.trim();
+  if(!name||!phone||!service){showToast('กรุณากรอกข้อมูล','ชื่อ เบอร์โทร และบริการที่ต้องการ','⚠️');return;}
+  const booking={id:Date.now(),name,phone,service,date,time,note,status:'pending',createdAt:new Date().toISOString()};
+  bookings.unshift(booking);
+  save(BOOKINGS_KEY,bookings);
+  renderAdminBookings();
+  document.getElementById('b-name').value='';
+  document.getElementById('b-phone').value='';
+  document.getElementById('b-service').value='';
+  document.getElementById('b-note').value='';
+  showToast('ส่งคำจองสำเร็จ!','เราจะโทรยืนยันภายใน 30 นาที','✅');
+}
+
+function showToast(txt,sub,icon='✅'){
+  const t=document.getElementById('toast');
+  t.querySelector('.toast-icon').textContent=icon;
+  document.getElementById('toast-txt').textContent=txt;
+  document.getElementById('toast-sub').textContent=sub;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+// ── LIGHTBOX ──
+function openLightbox(item){
+  const lb=document.getElementById('lightbox');
+  const lbImg=document.getElementById('lightbox-img');
+  if(item.url){lbImg.innerHTML=`<img src="${item.url}" alt="${item.label}" style="max-width:70vw;max-height:70vh;border-radius:12px;">`;}
+  else{lbImg.innerHTML=`<div style="padding:60px;text-align:center"><div style="font-size:60px">💅</div><div style="margin-top:12px;font-size:16px">${item.label}</div></div>`;}
+  lb.classList.add('open');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
+document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox();});
+
+// ── ADMIN ──
+const ADMIN_PASS=()=>load(PASS_KEY,DEFAULT_PASS);
+let adminLoggedIn=false;
+
+function openAdmin(e){
+  e.preventDefault();
+  document.getElementById('admin-overlay').classList.add('open');
+  if(!adminLoggedIn){
+    document.getElementById('admin-login-screen').style.display='block';
+    document.getElementById('admin-main-screen').style.display='none';
+  }
+}
+
+function closeAdmin(){
+  document.getElementById('admin-overlay').classList.remove('open');
+}
+
+function doLogin(){
+  const pass=document.getElementById('admin-pass').value;
+  if(pass===ADMIN_PASS()){
+    adminLoggedIn=true;
+    document.getElementById('admin-login-screen').style.display='none';
+    document.getElementById('admin-main-screen').style.display='block';
+    document.getElementById('admin-err').classList.remove('show');
+    document.getElementById('admin-pass').value='';
+    renderAdminPromos();renderAdminBookings();renderAdminGallery();
+  } else {
+    document.getElementById('admin-err').classList.add('show');
+  }
+}
+
+function switchAdminTab(tab,btn){
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+// ── ADMIN PROMOS ──
+function toggleAddPromoForm(){
+  addPromoOpen=!addPromoOpen;
+  document.getElementById('add-promo-form').classList.toggle('hidden',!addPromoOpen);
+}
+
+function addPromo(){
+  const title=document.getElementById('nf-title').value.trim();
+  const desc=document.getElementById('nf-desc').value.trim();
+  const price=document.getElementById('nf-price').value;
+  const oldPrice=document.getElementById('nf-old-price').value;
+  const badge=document.getElementById('nf-badge-type').value;
+  const icon=document.getElementById('nf-icon').value||'💅';
+  const expire=document.getElementById('nf-expire').value;
+  if(!title||!price){alert('กรุณากรอกชื่อและราคา');return;}
+  const p={id:Date.now(),icon,title,desc,price:Number(price),oldPrice:Number(oldPrice)||null,badge:badge||null,expire};
+  promos.push(p);
+  save(PROMOS_KEY,promos);
+  renderPromos();renderAdminPromos();
+  ['nf-title','nf-desc','nf-price','nf-old-price','nf-icon','nf-expire'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('nf-badge-type').value='';
+  toggleAddPromoForm();
+  showToast('เพิ่มโปรโมชั่นแล้ว!','โปรโมชั่นใหม่แสดงในหน้าเว็บแล้ว','🎉');
+}
+
+function deletePromo(id){
+  if(!confirm('ลบโปรโมชั่นนี้?'))return;
+  promos=promos.filter(p=>p.id!==id);
+  save(PROMOS_KEY,promos);
+  renderPromos();renderAdminPromos();
+}
+
+function renderAdminPromos(){
+  const list=document.getElementById('admin-promo-list');
+  if(!list)return;
+  list.innerHTML='';
+  if(!promos.length){list.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">ยังไม่มีโปรโมชั่น กด + เพิ่มได้เลย</div>';return;}
+  promos.forEach(p=>{
+    const div=document.createElement('div');
+    div.className='promo-admin-item';
+    div.innerHTML=`<div class="promo-admin-icon">${p.icon||'💅'}</div><div class="promo-admin-info"><div class="promo-admin-name">${p.title}</div><div class="promo-admin-price">฿${Number(p.price).toLocaleString()}${p.oldPrice?` (เดิม ฿${Number(p.oldPrice).toLocaleString()})`:''} ${p.expire?'· ถึง '+formatDate(p.expire):''}</div></div><div class="promo-admin-actions"><button class="admin-btn del" onclick="deletePromo(${p.id})">ลบ</button></div>`;
+    list.appendChild(div);
+  });
+}
+
+// ── ADMIN BOOKINGS ──
+const statusText={pending:'รอยืนยัน',confirmed:'ยืนยันแล้ว',done:'เสร็จสิ้น'};
+
+function confirmBooking(id){
+  const b=bookings.find(b=>b.id===id);
+  if(b){b.status='confirmed';save(BOOKINGS_KEY,bookings);renderAdminBookings();}
+}
+
+function renderAdminBookings(){
+  const list=document.getElementById('admin-booking-list');
+  if(!list)return;
+  list.innerHTML='';
+  if(!bookings.length){list.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">ยังไม่มีคำจอง</div>';return;}
+  bookings.slice(0,20).forEach(b=>{
+    const div=document.createElement('div');
+    div.className='booking-admin-item';
+    const th_days=['อา','จ','อ','พ','พฤ','ศ','ส'];
+    const dt=new Date(b.date);
+    div.innerHTML=`<span class="booking-status ${b.status}">${statusText[b.status]||b.status}</span><div class="booking-admin-info"><div class="booking-admin-name">${b.name} · ${b.service}</div><div class="booking-admin-detail">${th_days[dt.getDay()]} ${b.date} ${b.time} · ${b.phone}${b.note?' · '+b.note:''}</div></div>${b.status==='pending'?`<button class="admin-btn edit" onclick="confirmBooking(${b.id})" style="white-space:nowrap">ยืนยัน</button>`:''}`;
+    list.appendChild(div);
+  });
+}
+
+// ── ADMIN GALLERY ──
+function addGalleryItem(){
+  const url=document.getElementById('g-url').value.trim();
+  const cat=document.getElementById('g-cat').value;
+  const label=document.getElementById('g-label').value.trim()||'ผลงาน';
+  const item={id:Date.now(),url,cat,label};
+  gallery.unshift(item);
+  save(GALLERY_KEY,gallery);
+  renderGallery('all');renderAdminGallery();
+  document.getElementById('g-url').value='';
+  document.getElementById('g-label').value='';
+  showToast('เพิ่มผลงานแล้ว!','รูปผลงานแสดงในหน้าเว็บแล้ว','🖼️');
+}
+
+function deleteGalleryItem(id){
+  gallery=gallery.filter(g=>g.id!==id);
+  save(GALLERY_KEY,gallery);
+  renderGallery('all');renderAdminGallery();
+}
+
+function renderAdminGallery(){
+  const list=document.getElementById('admin-gallery-list');
+  if(!list)return;
+  list.innerHTML='';
+  if(!gallery.length){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีผลงาน</div>';return;}
+  const catTh={nail:'ทำเล็บ',lash:'ต่อขนตา',spa:'สปา'};
+  gallery.slice(0,10).forEach(g=>{
+    const div=document.createElement('div');
+    div.className='promo-admin-item';
+    div.innerHTML=`<div class="promo-admin-icon" style="background:var(--cream2);">${g.url?`<img src="${g.url}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.src=''">`:'🖼️'}</div><div class="promo-admin-info"><div class="promo-admin-name">${g.label}</div><div class="promo-admin-price">${catTh[g.cat]||g.cat} ${g.url?'· มีรูป':'· รูป placeholder'}</div></div><div class="promo-admin-actions"><button class="admin-btn del" onclick="deleteGalleryItem(${g.id})">ลบ</button></div>`;
+    list.appendChild(div);
+  });
+}
+
+function changePass(){
+  const np=document.getElementById('new-pass').value.trim();
+  if(np.length<4){alert('รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร');return;}
+  save(PASS_KEY,np);
+  document.getElementById('new-pass').value='';
+  showToast('เปลี่ยนรหัสผ่านแล้ว','รหัสผ่านใหม่มีผลทันที','🔒');
+}
+
+document.getElementById('admin-overlay').addEventListener('click',function(e){if(e.target===this)closeAdmin();});
+
+// START
+init();
+</script>
+</body>
+</html>
