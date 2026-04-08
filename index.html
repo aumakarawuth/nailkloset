@@ -765,22 +765,27 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
 </div>
 
 <script>
-// ── DATA STORE (localStorage) ──
-const PASS_KEY='nk_admin_pass', PROMOS_KEY='nk_promos', BOOKINGS_KEY='nk_bookings', GALLERY_KEY='nk_gallery';
-const DEFAULT_PASS='nail2025';
+// ============================================================
+//  Nail Kloset — Website Script
+//  เชื่อมต่อ Apps Script (api.gs) แทน localStorage
+// ============================================================
 
-function load(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+// ── CONFIG ──────────────────────────────────────────────────
+const API_URL = 'https://script.google.com/macros/s/AKfycbxUVkX8p8yKkQ1thBdRifKtkHRhdywxHNbZYIEX7W-kOBV1oFlDL_m1jGdxAvjPE6bA/exec';
 
-// Default promotions
-const DEFAULT_PROMOS=[
+async function api(params) {
+  const res = await fetch(API_URL + '?' + new URLSearchParams(params));
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+// ── DEFAULT DATA (fallback กรณี API ไม่ตอบ) ─────────────────
+const DEFAULT_PROMOS = [
   {id:1,icon:'💅',title:'Happy Hour เล็บ',desc:'ทำเล็บเจลทุกแบบ ลด 20% เฉพาะช่วง 10:00-12:00 น. วันจันทร์-ศุกร์',price:240,oldPrice:300,badge:'hot',expire:'2025-12-31'},
   {id:2,icon:'✨',title:'ต่อขนตา Classic Set',desc:'ต่อขนตา Classic พร้อมฟรี! บำรุงขนตาราคาพิเศษ สำหรับลูกค้าใหม่',price:490,oldPrice:650,badge:'new',expire:'2025-08-31'},
   {id:3,icon:'💆',title:'Spa Duo Package',desc:'สปามือ + สปาเท้า คู่กัน พร้อม mask บำรุงผิว ราคาพิเศษ',price:600,oldPrice:800,badge:'gold',expire:'2025-09-30'},
 ];
-
-// Default gallery items
-const DEFAULT_GALLERY=[
+const DEFAULT_GALLERY = [
   {id:1,url:'',cat:'nail',label:'French Gel Nail'},
   {id:2,url:'',cat:'nail',label:'Marble Art'},
   {id:3,url:'',cat:'lash',label:'Classic Lash Set'},
@@ -789,291 +794,440 @@ const DEFAULT_GALLERY=[
   {id:6,url:'',cat:'lash',label:'Volume Lash'},
 ];
 
-let promos=load(PROMOS_KEY,DEFAULT_PROMOS);
-let bookings=load(BOOKINGS_KEY,[]);
-let gallery=load(GALLERY_KEY,DEFAULT_GALLERY);
-let addPromoOpen=false;
+// ── STATE ────────────────────────────────────────────────────
+let promos        = [];
+let bookings      = [];
+let gallery       = [];
+let adminLoggedIn = false;
+let addPromoOpen  = false;
 
-// Gallery colors for placeholders
-const galColors=[
+// Gallery placeholder colors
+const galColors = [
   ['#EDD9A3','#D4847A'],['#D4847A','#9C8A87'],['#B5D4F4','#5C4A46'],
   ['#E8D8D5','#C9A96E'],['#D1FAE5','#5C4A46'],['#F2D5D2','#B5635A'],
 ];
 
-// ── INIT ──
-function init(){
+// ── INIT ─────────────────────────────────────────────────────
+async function init() {
   setMinDate();
+
+  // แสดง loading ระหว่างดึงข้อมูล
+  document.getElementById('promo-grid').innerHTML =
+    '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--muted)">⏳ กำลังโหลด...</div>';
+
+  try {
+    const [p, g] = await Promise.all([
+      api({ action: 'getPromos'  }),
+      api({ action: 'getGallery' }),
+    ]);
+    promos  = p.promos  && p.promos.length  ? p.promos  : DEFAULT_PROMOS;
+    gallery = g.gallery && g.gallery.length ? g.gallery : DEFAULT_GALLERY;
+  } catch (e) {
+    // ถ้า API ยังไม่พร้อม ใช้ค่า default แทน ไม่พัง
+    promos  = DEFAULT_PROMOS;
+    gallery = DEFAULT_GALLERY;
+    console.warn('API unavailable, using defaults');
+  }
+
   renderPromos();
   renderGallery('all');
-  renderAdminPromos();
-  renderAdminBookings();
-  renderAdminGallery();
 }
 
-function setMinDate(){
-  const inp=document.getElementById('b-date');
-  const today=new Date().toISOString().split('T')[0];
-  inp.min=today;inp.value=today;
+function setMinDate() {
+  const inp   = document.getElementById('b-date');
+  const today = new Date().toISOString().split('T')[0];
+  inp.min = today;
+  inp.value = today;
 }
 
-// ── NAV SCROLL ──
-window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+// ── NAV ──────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
 });
 
-function toggleMenu(){
+function toggleMenu() {
   document.getElementById('mobile-menu').classList.toggle('open');
 }
 
-function scrollToBooking(){
-  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+function scrollToBooking() {
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
 }
 
-// ── GALLERY ──
-function renderGallery(filter){
-  const grid=document.getElementById('gallery-grid');
-  const items=filter==='all'?gallery:gallery.filter(i=>i.cat===filter);
-  grid.innerHTML='';
-  items.forEach((item,idx)=>{
-    const div=document.createElement('div');
-    div.className='gallery-item';
-    if(idx===0)div.classList.add('wide');
-    if(idx===1)div.classList.add('tall');
-    const [c1,c2]=galColors[idx%galColors.length];
-    const inner=item.url
-      ?`<img src="${item.url}" alt="${item.label}" style="width:100%;height:100%;object-fit:cover;">`
-      :`<div class="gallery-placeholder" style="background:linear-gradient(135deg,${c1},${c2})"><div style="font-size:40px;opacity:0.7">💅</div><div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:8px">${item.label}</div></div>`;
-    div.innerHTML=`${inner}<div class="gallery-overlay"><div class="gallery-label">${item.label}</div></div>`;
-    div.onclick=()=>openLightbox(item);
+// ── GALLERY ──────────────────────────────────────────────────
+function renderGallery(filter) {
+  const grid  = document.getElementById('gallery-grid');
+  const items = filter === 'all' ? gallery : gallery.filter(i => i.cat === filter);
+  grid.innerHTML = '';
+
+  items.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    if (idx === 0) div.classList.add('wide');
+    if (idx === 1) div.classList.add('tall');
+    const [c1, c2] = galColors[idx % galColors.length];
+    const inner = item.url
+      ? `<img src="${item.url}" alt="${item.label}" style="width:100%;height:100%;object-fit:cover;">`
+      : `<div class="gallery-placeholder" style="background:linear-gradient(135deg,${c1},${c2})">
+           <div style="font-size:40px;opacity:0.7">💅</div>
+           <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:8px">${item.label}</div>
+         </div>`;
+    div.innerHTML = `${inner}<div class="gallery-overlay"><div class="gallery-label">${item.label}</div></div>`;
+    div.onclick = () => openLightbox(item);
     grid.appendChild(div);
   });
-  if(!items.length)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">ยังไม่มีผลงานในหมวดนี้</div>';
+
+  if (!items.length)
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">ยังไม่มีผลงานในหมวดนี้</div>';
 }
 
-function filterGallery(cat,btn){
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+function filterGallery(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderGallery(cat);
 }
 
-// ── PROMOTIONS ──
-const badgeClass={hot:'',gold:'gold',new:'new'};
-const badgeText={hot:'Hot Deal',gold:'Premium',new:'New'};
+// ── PROMOTIONS ───────────────────────────────────────────────
+const badgeClass = { hot: '', gold: 'gold', new: 'new' };
+const badgeText  = { hot: 'Hot Deal', gold: 'Premium', new: 'New' };
 
-function renderPromos(){
-  const grid=document.getElementById('promo-grid');
-  grid.innerHTML='';
-  promos.forEach(p=>{
-    const card=document.createElement('div');
-    card.className='promo-card';
-    const [c1,c2]=galColors[promos.indexOf(p)%galColors.length];
-    const badge=p.badge?`<div class="promo-badge ${badgeClass[p.badge]||''}">${badgeText[p.badge]||''}</div>`:'';
-    const oldP=p.oldPrice?`<span class="promo-old">฿${Number(p.oldPrice).toLocaleString()}</span>`:'';
-    const exp=p.expire?`<div class="promo-expire">ถึง ${formatDate(p.expire)}</div>`:'';
-    card.innerHTML=`${badge}<div class="promo-img" style="background:linear-gradient(135deg,${c1},${c2})">${p.icon||'💅'}</div><div class="promo-body"><div class="promo-title">${p.title}</div><p class="promo-desc">${p.desc}</p><div class="promo-footer"><div><div><span class="promo-price">฿${Number(p.price).toLocaleString()}</span>${oldP}</div>${exp}</div><button class="promo-btn" onclick="scrollToBooking()">จองเลย</button></div></div>`;
+function renderPromos() {
+  const grid = document.getElementById('promo-grid');
+  grid.innerHTML = '';
+  promos.forEach(p => {
+    const card     = document.createElement('div');
+    card.className = 'promo-card';
+    const [c1, c2] = galColors[promos.indexOf(p) % galColors.length];
+    const badge = p.badge ? `<div class="promo-badge ${badgeClass[p.badge] || ''}">${badgeText[p.badge] || ''}</div>` : '';
+    const oldP  = p.oldPrice ? `<span class="promo-old">฿${Number(p.oldPrice).toLocaleString()}</span>` : '';
+    const exp   = p.expire   ? `<div class="promo-expire">ถึง ${formatDate(p.expire)}</div>` : '';
+    card.innerHTML = `${badge}
+      <div class="promo-img" style="background:linear-gradient(135deg,${c1},${c2})">${p.icon || '💅'}</div>
+      <div class="promo-body">
+        <div class="promo-title">${p.title}</div>
+        <p class="promo-desc">${p.desc}</p>
+        <div class="promo-footer">
+          <div><div><span class="promo-price">฿${Number(p.price).toLocaleString()}</span>${oldP}</div>${exp}</div>
+          <button class="promo-btn" onclick="scrollToBooking()">จองเลย</button>
+        </div>
+      </div>`;
     grid.appendChild(card);
   });
-  if(!promos.length)grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">ยังไม่มีโปรโมชั่น</div>';
+  if (!promos.length)
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">ยังไม่มีโปรโมชั่น</div>';
 }
 
-function formatDate(d){
-  if(!d)return'';
-  const dt=new Date(d);
-  const m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-  return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()+543}`;
+function formatDate(d) {
+  if (!d) return '';
+  const dt = new Date(d);
+  const m  = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear() + 543}`;
 }
 
-// ── BOOKING ──
-function submitBooking(){
-  const name=document.getElementById('b-name').value.trim();
-  const phone=document.getElementById('b-phone').value.trim();
-  const service=document.getElementById('b-service').value;
-  const date=document.getElementById('b-date').value;
-  const time=document.getElementById('b-time').value;
-  const note=document.getElementById('b-note').value.trim();
-  if(!name||!phone||!service){showToast('กรุณากรอกข้อมูล','ชื่อ เบอร์โทร และบริการที่ต้องการ','⚠️');return;}
-  const booking={id:Date.now(),name,phone,service,date,time,note,status:'pending',createdAt:new Date().toISOString()};
-  bookings.unshift(booking);
-  save(BOOKINGS_KEY,bookings);
-  renderAdminBookings();
-  document.getElementById('b-name').value='';
-  document.getElementById('b-phone').value='';
-  document.getElementById('b-service').value='';
-  document.getElementById('b-note').value='';
-  showToast('ส่งคำจองสำเร็จ!','เราจะโทรยืนยันภายใน 30 นาที','✅');
-}
+// ── BOOKING ──────────────────────────────────────────────────
+async function submitBooking() {
+  const name    = document.getElementById('b-name').value.trim();
+  const phone   = document.getElementById('b-phone').value.trim();
+  const service = document.getElementById('b-service').value;
+  const date    = document.getElementById('b-date').value;
+  const time    = document.getElementById('b-time').value;
+  const note    = document.getElementById('b-note').value.trim();
 
-function showToast(txt,sub,icon='✅'){
-  const t=document.getElementById('toast');
-  t.querySelector('.toast-icon').textContent=icon;
-  document.getElementById('toast-txt').textContent=txt;
-  document.getElementById('toast-sub').textContent=sub;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),4000);
-}
+  if (!name || !phone || !service) {
+    showToast('กรุณากรอกข้อมูล', 'ชื่อ เบอร์โทร และบริการที่ต้องการ', '⚠️');
+    return;
+  }
 
-// ── LIGHTBOX ──
-function openLightbox(item){
-  const lb=document.getElementById('lightbox');
-  const lbImg=document.getElementById('lightbox-img');
-  if(item.url){lbImg.innerHTML=`<img src="${item.url}" alt="${item.label}" style="max-width:70vw;max-height:70vh;border-radius:12px;">`;}
-  else{lbImg.innerHTML=`<div style="padding:60px;text-align:center"><div style="font-size:60px">💅</div><div style="margin-top:12px;font-size:16px">${item.label}</div></div>`;}
-  lb.classList.add('open');
-}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
-document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox();});
+  const btn       = document.querySelector('.form-submit');
+  btn.textContent = 'กำลังส่ง...';
+  btn.disabled    = true;
 
-// ── ADMIN ──
-const ADMIN_PASS=()=>load(PASS_KEY,DEFAULT_PASS);
-let adminLoggedIn=false;
-
-function openAdmin(e){
-  e.preventDefault();
-  document.getElementById('admin-overlay').classList.add('open');
-  if(!adminLoggedIn){
-    document.getElementById('admin-login-screen').style.display='block';
-    document.getElementById('admin-main-screen').style.display='none';
+  try {
+    const res = await api({ action: 'addBooking', name, phone, service, date, time, note });
+    if (res.ok) {
+      ['b-name','b-phone','b-service','b-note'].forEach(id => document.getElementById(id).value = '');
+      showToast('ส่งคำจองสำเร็จ!', 'เราจะโทรยืนยันภายใน 30 นาที', '✅');
+    } else {
+      throw new Error(res.error || 'error');
+    }
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่อีกครั้ง', '❌');
+  } finally {
+    btn.textContent = 'ส่งคำจองคิว →';
+    btn.disabled    = false;
   }
 }
 
-function closeAdmin(){
+function showToast(txt, sub, icon = '✅') {
+  const t = document.getElementById('toast');
+  t.querySelector('.toast-icon').textContent = icon;
+  document.getElementById('toast-txt').textContent = txt;
+  document.getElementById('toast-sub').textContent = sub;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ── LIGHTBOX ─────────────────────────────────────────────────
+function openLightbox(item) {
+  const lbImg = document.getElementById('lightbox-img');
+  lbImg.innerHTML = item.url
+    ? `<img src="${item.url}" alt="${item.label}" style="max-width:70vw;max-height:70vh;border-radius:12px;">`
+    : `<div style="padding:60px;text-align:center"><div style="font-size:60px">💅</div><div style="margin-top:12px;font-size:16px">${item.label}</div></div>`;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+// ── ADMIN ─────────────────────────────────────────────────────
+function openAdmin(e) {
+  e.preventDefault();
+  document.getElementById('admin-overlay').classList.add('open');
+  if (!adminLoggedIn) {
+    document.getElementById('admin-login-screen').style.display = 'block';
+    document.getElementById('admin-main-screen').style.display  = 'none';
+  }
+}
+
+function closeAdmin() {
   document.getElementById('admin-overlay').classList.remove('open');
 }
 
-function doLogin(){
-  const pass=document.getElementById('admin-pass').value;
-  if(pass===ADMIN_PASS()){
-    adminLoggedIn=true;
-    document.getElementById('admin-login-screen').style.display='none';
-    document.getElementById('admin-main-screen').style.display='block';
-    document.getElementById('admin-err').classList.remove('show');
-    document.getElementById('admin-pass').value='';
-    renderAdminPromos();renderAdminBookings();renderAdminGallery();
-  } else {
-    document.getElementById('admin-err').classList.add('show');
+async function doLogin() {
+  const pass = document.getElementById('admin-pass').value;
+  const btn  = document.querySelector('.admin-login-btn');
+  const err  = document.getElementById('admin-err');
+
+  btn.textContent = 'กำลังตรวจสอบ...';
+  btn.disabled    = true;
+
+  try {
+    const res = await api({ action: 'loginAdmin', pass });
+    if (res.ok) {
+      adminLoggedIn = true;
+      document.getElementById('admin-login-screen').style.display = 'none';
+      document.getElementById('admin-main-screen').style.display  = 'block';
+      err.classList.remove('show');
+      document.getElementById('admin-pass').value = '';
+      await _loadAdminData();
+    } else {
+      err.classList.add('show');
+    }
+  } catch (e) {
+    err.classList.add('show');
+  } finally {
+    btn.textContent = 'เข้าสู่ระบบ';
+    btn.disabled    = false;
   }
 }
 
-function switchAdminTab(tab,btn){
-  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+async function _loadAdminData() {
+  const [b, p, g] = await Promise.all([
+    api({ action: 'getBookings' }),
+    api({ action: 'getPromos'   }),
+    api({ action: 'getGallery'  }),
+  ]);
+  bookings = b.bookings || [];
+  promos   = p.promos   || [];
+  gallery  = g.gallery  || [];
+  renderAdminBookings();
+  renderAdminPromos();
+  renderAdminGallery();
+}
+
+function switchAdminTab(tab, btn) {
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
 }
 
-// ── ADMIN PROMOS ──
-function toggleAddPromoForm(){
-  addPromoOpen=!addPromoOpen;
-  document.getElementById('add-promo-form').classList.toggle('hidden',!addPromoOpen);
+// ── ADMIN PROMOS ──────────────────────────────────────────────
+function toggleAddPromoForm() {
+  addPromoOpen = !addPromoOpen;
+  document.getElementById('add-promo-form').classList.toggle('hidden', !addPromoOpen);
 }
 
-function addPromo(){
-  const title=document.getElementById('nf-title').value.trim();
-  const desc=document.getElementById('nf-desc').value.trim();
-  const price=document.getElementById('nf-price').value;
-  const oldPrice=document.getElementById('nf-old-price').value;
-  const badge=document.getElementById('nf-badge-type').value;
-  const icon=document.getElementById('nf-icon').value||'💅';
-  const expire=document.getElementById('nf-expire').value;
-  if(!title||!price){alert('กรุณากรอกชื่อและราคา');return;}
-  const p={id:Date.now(),icon,title,desc,price:Number(price),oldPrice:Number(oldPrice)||null,badge:badge||null,expire};
-  promos.push(p);
-  save(PROMOS_KEY,promos);
-  renderPromos();renderAdminPromos();
-  ['nf-title','nf-desc','nf-price','nf-old-price','nf-icon','nf-expire'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('nf-badge-type').value='';
-  toggleAddPromoForm();
-  showToast('เพิ่มโปรโมชั่นแล้ว!','โปรโมชั่นใหม่แสดงในหน้าเว็บแล้ว','🎉');
+async function addPromo() {
+  const title = document.getElementById('nf-title').value.trim();
+  const price = document.getElementById('nf-price').value;
+  if (!title || !price) { alert('กรุณากรอกชื่อและราคา'); return; }
+
+  try {
+    const res = await api({
+      action:   'addPromo',
+      icon:     document.getElementById('nf-icon').value || '💅',
+      title,
+      desc:     document.getElementById('nf-desc').value.trim(),
+      price,
+      oldPrice: document.getElementById('nf-old-price').value,
+      badge:    document.getElementById('nf-badge-type').value,
+      expire:   document.getElementById('nf-expire').value,
+    });
+    if (res.ok) {
+      ['nf-title','nf-desc','nf-price','nf-old-price','nf-icon','nf-expire']
+        .forEach(id => document.getElementById(id).value = '');
+      document.getElementById('nf-badge-type').value = '';
+      toggleAddPromoForm();
+      await _loadAdminData();
+      renderPromos();
+      showToast('เพิ่มโปรโมชั่นแล้ว!', 'โปรโมชั่นใหม่แสดงในหน้าเว็บแล้ว', '🎉');
+    }
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่', '❌');
+  }
 }
 
-function deletePromo(id){
-  if(!confirm('ลบโปรโมชั่นนี้?'))return;
-  promos=promos.filter(p=>p.id!==id);
-  save(PROMOS_KEY,promos);
-  renderPromos();renderAdminPromos();
+async function deletePromo(id) {
+  if (!confirm('ลบโปรโมชั่นนี้?')) return;
+  try {
+    await api({ action: 'deletePromo', id });
+    await _loadAdminData();
+    renderPromos();
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่', '❌');
+  }
 }
 
-function renderAdminPromos(){
-  const list=document.getElementById('admin-promo-list');
-  if(!list)return;
-  list.innerHTML='';
-  if(!promos.length){list.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">ยังไม่มีโปรโมชั่น กด + เพิ่มได้เลย</div>';return;}
-  promos.forEach(p=>{
-    const div=document.createElement('div');
-    div.className='promo-admin-item';
-    div.innerHTML=`<div class="promo-admin-icon">${p.icon||'💅'}</div><div class="promo-admin-info"><div class="promo-admin-name">${p.title}</div><div class="promo-admin-price">฿${Number(p.price).toLocaleString()}${p.oldPrice?` (เดิม ฿${Number(p.oldPrice).toLocaleString()})`:''} ${p.expire?'· ถึง '+formatDate(p.expire):''}</div></div><div class="promo-admin-actions"><button class="admin-btn del" onclick="deletePromo(${p.id})">ลบ</button></div>`;
+function renderAdminPromos() {
+  const list = document.getElementById('admin-promo-list');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!promos.length) {
+    list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted)">ยังไม่มีโปรโมชั่น กด + เพิ่มได้เลย</div>';
+    return;
+  }
+  promos.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'promo-admin-item';
+    div.innerHTML = `
+      <div class="promo-admin-icon">${p.icon || '💅'}</div>
+      <div class="promo-admin-info">
+        <div class="promo-admin-name">${p.title}</div>
+        <div class="promo-admin-price">
+          ฿${Number(p.price).toLocaleString()}
+          ${p.oldPrice ? ` (เดิม ฿${Number(p.oldPrice).toLocaleString()})` : ''}
+          ${p.expire ? ' · ถึง ' + formatDate(p.expire) : ''}
+        </div>
+      </div>
+      <div class="promo-admin-actions">
+        <button class="admin-btn del" onclick="deletePromo('${p.id}')">ลบ</button>
+      </div>`;
     list.appendChild(div);
   });
 }
 
-// ── ADMIN BOOKINGS ──
-const statusText={pending:'รอยืนยัน',confirmed:'ยืนยันแล้ว',done:'เสร็จสิ้น'};
+// ── ADMIN BOOKINGS ────────────────────────────────────────────
+const statusText = { pending: 'รอยืนยัน', confirmed: 'ยืนยันแล้ว', done: 'เสร็จสิ้น' };
 
-function confirmBooking(id){
-  const b=bookings.find(b=>b.id===id);
-  if(b){b.status='confirmed';save(BOOKINGS_KEY,bookings);renderAdminBookings();}
+async function confirmBooking(id) {
+  try {
+    await api({ action: 'updateBookingStatus', id, status: 'confirmed' });
+    await _loadAdminData();
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่', '❌');
+  }
 }
 
-function renderAdminBookings(){
-  const list=document.getElementById('admin-booking-list');
-  if(!list)return;
-  list.innerHTML='';
-  if(!bookings.length){list.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted)">ยังไม่มีคำจอง</div>';return;}
-  bookings.slice(0,20).forEach(b=>{
-    const div=document.createElement('div');
-    div.className='booking-admin-item';
-    const th_days=['อา','จ','อ','พ','พฤ','ศ','ส'];
-    const dt=new Date(b.date);
-    div.innerHTML=`<span class="booking-status ${b.status}">${statusText[b.status]||b.status}</span><div class="booking-admin-info"><div class="booking-admin-name">${b.name} · ${b.service}</div><div class="booking-admin-detail">${th_days[dt.getDay()]} ${b.date} ${b.time} · ${b.phone}${b.note?' · '+b.note:''}</div></div>${b.status==='pending'?`<button class="admin-btn edit" onclick="confirmBooking(${b.id})" style="white-space:nowrap">ยืนยัน</button>`:''}`;
+function renderAdminBookings() {
+  const list = document.getElementById('admin-booking-list');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!bookings.length) {
+    list.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted)">ยังไม่มีคำจอง</div>';
+    return;
+  }
+  const th_days = ['อา','จ','อ','พ','พฤ','ศ','ส'];
+  bookings.slice(0, 20).forEach(b => {
+    const div = document.createElement('div');
+    div.className = 'booking-admin-item';
+    const dt = new Date(b.date);
+    div.innerHTML = `
+      <span class="booking-status ${b.status}">${statusText[b.status] || b.status}</span>
+      <div class="booking-admin-info">
+        <div class="booking-admin-name">${b.name} · ${b.service}</div>
+        <div class="booking-admin-detail">
+          ${th_days[dt.getDay()]} ${b.date} ${b.time} · ${b.phone}
+          ${b.note ? ' · ' + b.note : ''}
+        </div>
+      </div>
+      ${b.status === 'pending'
+        ? `<button class="admin-btn edit" onclick="confirmBooking('${b.id}')" style="white-space:nowrap">ยืนยัน</button>`
+        : ''}`;
     list.appendChild(div);
   });
 }
 
-// ── ADMIN GALLERY ──
-function addGalleryItem(){
-  const url=document.getElementById('g-url').value.trim();
-  const cat=document.getElementById('g-cat').value;
-  const label=document.getElementById('g-label').value.trim()||'ผลงาน';
-  const item={id:Date.now(),url,cat,label};
-  gallery.unshift(item);
-  save(GALLERY_KEY,gallery);
-  renderGallery('all');renderAdminGallery();
-  document.getElementById('g-url').value='';
-  document.getElementById('g-label').value='';
-  showToast('เพิ่มผลงานแล้ว!','รูปผลงานแสดงในหน้าเว็บแล้ว','🖼️');
+// ── ADMIN GALLERY ─────────────────────────────────────────────
+async function addGalleryItem() {
+  const url   = document.getElementById('g-url').value.trim();
+  const cat   = document.getElementById('g-cat').value;
+  const label = document.getElementById('g-label').value.trim() || 'ผลงาน';
+
+  try {
+    const res = await api({ action: 'addGallery', url, cat, label });
+    if (res.ok) {
+      document.getElementById('g-url').value   = '';
+      document.getElementById('g-label').value = '';
+      await _loadAdminData();
+      renderGallery('all');
+      showToast('เพิ่มผลงานแล้ว!', 'รูปผลงานแสดงในหน้าเว็บแล้ว', '🖼️');
+    }
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่', '❌');
+  }
 }
 
-function deleteGalleryItem(id){
-  gallery=gallery.filter(g=>g.id!==id);
-  save(GALLERY_KEY,gallery);
-  renderGallery('all');renderAdminGallery();
+async function deleteGalleryItem(id) {
+  try {
+    await api({ action: 'deleteGallery', id });
+    await _loadAdminData();
+    renderGallery('all');
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่', '❌');
+  }
 }
 
-function renderAdminGallery(){
-  const list=document.getElementById('admin-gallery-list');
-  if(!list)return;
-  list.innerHTML='';
-  if(!gallery.length){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีผลงาน</div>';return;}
-  const catTh={nail:'ทำเล็บ',lash:'ต่อขนตา',spa:'สปา'};
-  gallery.slice(0,10).forEach(g=>{
-    const div=document.createElement('div');
-    div.className='promo-admin-item';
-    div.innerHTML=`<div class="promo-admin-icon" style="background:var(--cream2);">${g.url?`<img src="${g.url}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.src=''">`:'🖼️'}</div><div class="promo-admin-info"><div class="promo-admin-name">${g.label}</div><div class="promo-admin-price">${catTh[g.cat]||g.cat} ${g.url?'· มีรูป':'· รูป placeholder'}</div></div><div class="promo-admin-actions"><button class="admin-btn del" onclick="deleteGalleryItem(${g.id})">ลบ</button></div>`;
+function renderAdminGallery() {
+  const list = document.getElementById('admin-gallery-list');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!gallery.length) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">ยังไม่มีผลงาน</div>';
+    return;
+  }
+  const catTh = { nail: 'ทำเล็บ', lash: 'ต่อขนตา', spa: 'สปา' };
+  gallery.slice(0, 10).forEach(g => {
+    const div = document.createElement('div');
+    div.className = 'promo-admin-item';
+    div.innerHTML = `
+      <div class="promo-admin-icon" style="background:var(--cream2);">
+        ${g.url
+          ? `<img src="${g.url}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;" onerror="this.src=''">`
+          : '🖼️'}
+      </div>
+      <div class="promo-admin-info">
+        <div class="promo-admin-name">${g.label}</div>
+        <div class="promo-admin-price">${catTh[g.cat] || g.cat} ${g.url ? '· มีรูป' : '· รูป placeholder'}</div>
+      </div>
+      <div class="promo-admin-actions">
+        <button class="admin-btn del" onclick="deleteGalleryItem('${g.id}')">ลบ</button>
+      </div>`;
     list.appendChild(div);
   });
 }
 
-function changePass(){
-  const np=document.getElementById('new-pass').value.trim();
-  if(np.length<4){alert('รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร');return;}
-  save(PASS_KEY,np);
-  document.getElementById('new-pass').value='';
-  showToast('เปลี่ยนรหัสผ่านแล้ว','รหัสผ่านใหม่มีผลทันที','🔒');
-}
+// ── SETTINGS TAB ─────────────────────────────────────────────
+// หมายเหตุ: changePass() ถูกลบออก
+// เปลี่ยนรหัสผ่านได้ที่ WEB_ADMIN_PASS ใน api.gs แทน
 
-document.getElementById('admin-overlay').addEventListener('click',function(e){if(e.target===this)closeAdmin();});
+document.getElementById('admin-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeAdmin();
+});
 
-// START
+// ── START ─────────────────────────────────────────────────────
 init();
 </script>
 </body>
