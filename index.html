@@ -291,6 +291,64 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
   .admin-body{padding:20px;}
   .af-row{grid-template-columns:1fr;}
 }
+
+
+/* Step indicator */
+.bk-steps{display:flex;align-items:center;margin-bottom:28px;gap:0;}
+.bk-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;}
+.bk-step-num{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.5);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.25s;}
+.bk-step.active .bk-step-num{background:var(--rose);border-color:var(--rose);color:#fff;box-shadow:0 0 12px rgba(212,132,122,0.5);}
+.bk-step.done .bk-step-num{background:#1DB446;border-color:#1DB446;color:#fff;}
+.bk-step-lbl{font-size:11px;color:rgba(255,255,255,0.4);white-space:nowrap;}
+.bk-step.active .bk-step-lbl{color:rgba(255,255,255,0.9);}
+.bk-step.done .bk-step-lbl{color:#1DB446;}
+.bk-step-line{flex:1;height:1.5px;background:rgba(255,255,255,0.15);margin:0 8px;margin-bottom:18px;}
+ 
+/* Service Picker */
+.svc-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;}
+.svc-pick-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;cursor:pointer;transition:all 0.2s;}
+.svc-pick-item:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);}
+.svc-pick-item.selected{background:rgba(212,132,122,0.2);border-color:var(--rose);}
+.svc-pick-icon{font-size:20px;flex-shrink:0;}
+.svc-pick-name{font-size:14px;font-weight:600;color:#fff;flex:1;}
+.svc-pick-dur{font-size:11px;color:rgba(255,255,255,0.45);white-space:nowrap;}
+ 
+/* Slot grid */
+.slot-section{margin-top:4px;}
+.slot-hint{display:flex;align-items:center;font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:10px;gap:6px;}
+.slot-hint-dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+.slot-hint-dot.available{background:#1DB446;}
+.slot-hint-dot.busy{background:rgba(255,255,255,0.2);}
+.slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.slot-btn{padding:10px 4px;border-radius:10px;border:1.5px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85);font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:center;}
+.slot-btn:hover:not(.busy){background:rgba(212,132,122,0.25);border-color:var(--rose);}
+.slot-btn.selected{background:var(--rose);border-color:var(--rose);color:#fff;box-shadow:0 4px 14px rgba(212,132,122,0.4);}
+.slot-btn.busy{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.06);color:rgba(255,255,255,0.2);cursor:not-allowed;text-decoration:line-through;}
+.slot-loading{grid-column:1/-1;text-align:center;padding:24px;color:rgba(255,255,255,0.4);font-size:14px;}
+.slot-spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:var(--rose);border-radius:50%;animation:spin 0.7s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+ 
+/* Summary */
+.bk-summary{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;}
+.bk-summary-title{font-size:14px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:14px;}
+.bk-summary-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px;}
+.bk-summary-row:last-child{border-bottom:none;}
+.bk-summary-row span:first-child{color:rgba(255,255,255,0.5);}
+.bk-summary-row span:last-child{color:#fff;font-weight:600;text-align:right;max-width:60%;}
+ 
+/* Buttons */
+.bk-next-btn{flex:1;padding:15px 20px;background:var(--rose);border:none;border-radius:12px;color:#fff;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;letter-spacing:0.02em;}
+.bk-next-btn:hover{background:var(--rose-deep);transform:translateY(-1px);}
+.bk-next-btn:disabled{background:rgba(255,255,255,0.15);cursor:not-allowed;transform:none;}
+.bk-back-btn{padding:14px 20px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;color:rgba(255,255,255,0.7);font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.bk-back-btn:hover{background:rgba(255,255,255,0.15);}
+ 
+/* Panel transitions */
+.bk-panel{animation:panelIn 0.25s ease both;}
+.bk-panel.hidden{display:none;}
+@keyframes panelIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+
+
 </style>
 </head>
 <body>
@@ -350,7 +408,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
           <div class="hero-stat-lbl">ลูกค้าพึงพอใจ</div>
         </div>
         <div>
-          <div class="hero-stat-num">3<span>ปี</span></div>
+          <div class="hero-stat-num">5<span>ปี</span></div>
           <div class="hero-stat-lbl">ประสบการณ์</div>
         </div>
         <div>
@@ -456,61 +514,118 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
 <section id="booking">
   <div class="container">
     <div class="booking-inner">
+ 
+      <!-- LEFT: INFO -->
       <div class="booking-info">
         <div class="section-tag">นัดหมาย</div>
         <h2 class="section-title" style="color:#fff;">จองคิว<br><em>ง่ายๆ</em> ใน<br>ไม่กี่คลิก</h2>
-        <p class="section-sub">กรอกข้อมูลง่ายๆ เราจะโทรยืนยันคิวภายใน 30 นาที</p>
+        <p class="section-sub">กรอกข้อมูลง่ายๆ เลือก slot ว่าง<br>เราจะยืนยันผ่าน LINE ทันที</p>
         <ul class="booking-features">
-          <li>ไม่ต้องเสียเวลารอคิวหน้าร้าน</li>
-          <li>เลือกบริการและช่างที่ต้องการ</li>
-          <li>ยืนยันคิวผ่าน LINE / โทรศัพท์</li>
-          <li>ยกเลิกหรือเลื่อนนัดได้ล่วงหน้า 24 ชม.</li>
+          <li>เห็น time slot ว่างจริงแบบ real-time</li>
+          <li>ไม่ซ้อนคิวกับลูกค้าท่านอื่น</li>
+          <li>พนักงานได้รับแจ้งทาง LINE ทันที</li>
+          <li>มีระบบเตือนก่อนวันนัด 1 วัน</li>
         </ul>
       </div>
+ 
+      <!-- RIGHT: FORM -->
       <div class="booking-form" id="booking-form">
-        <div class="form-title">จองคิว</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">ชื่อ - นามสกุล</label>
-            <input class="form-input" type="text" placeholder="ชื่อของคุณ" id="b-name">
+        <div class="form-title">จองคิวออนไลน์</div>
+ 
+        <!-- Step indicator -->
+        <div class="bk-steps">
+          <div class="bk-step active" id="bk-step-1">
+            <div class="bk-step-num">1</div>
+            <div class="bk-step-lbl">ข้อมูล</div>
           </div>
-          <div class="form-group">
-            <label class="form-label">เบอร์โทรศัพท์</label>
-            <input class="form-input" type="tel" placeholder="0XX-XXX-XXXX" id="b-phone">
+          <div class="bk-step-line"></div>
+          <div class="bk-step" id="bk-step-2">
+            <div class="bk-step-num">2</div>
+            <div class="bk-step-lbl">วันและเวลา</div>
           </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">บริการที่ต้องการ</label>
-          <select class="form-select" id="b-service">
-            <option value="">เลือกบริการ</option>
-            <option>ทำเล็บ</option>
-            <option>ต่อขนตา</option>
-            <option>สปามือ / เท้า</option>
-            <option>แว็กขน</option>
-            <option>หลายบริการ</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">วันที่</label>
-            <input class="form-input" type="date" id="b-date">
-          </div>
-          <div class="form-group">
-            <label class="form-label">เวลาประมาณ</label>
-            <select class="form-select" id="b-time">
-              <option>10:00</option><option>11:00</option><option>12:00</option>
-              <option>13:00</option><option>14:00</option><option>15:00</option>
-              <option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option>
-            </select>
+          <div class="bk-step-line"></div>
+          <div class="bk-step" id="bk-step-3">
+            <div class="bk-step-num">3</div>
+            <div class="bk-step-lbl">ยืนยัน</div>
           </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">หมายเหตุ (ไม่บังคับ)</label>
-          <textarea class="form-textarea" placeholder="เช่น ลาย ดีไซน์ หรือความต้องการพิเศษ..." id="b-note"></textarea>
+ 
+        <!-- ── STEP 1: ข้อมูลลูกค้า + บริการ ── -->
+        <div class="bk-panel" id="bk-panel-1">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ชื่อ - นามสกุล</label>
+              <input class="form-input" type="text" placeholder="ชื่อของคุณ" id="b-name" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">เบอร์โทรศัพท์</label>
+              <input class="form-input" type="tel" placeholder="0XX-XXX-XXXX" id="b-phone" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">บริการที่ต้องการ</label>
+            <div class="svc-picker" id="svc-picker">
+              <div class="svc-pick-item" data-svc="ทำเล็บ"        onclick="pickService(this)"><span class="svc-pick-icon">💅</span><span class="svc-pick-name">ทำเล็บ</span><span class="svc-pick-dur">90 นาที</span></div>
+              <div class="svc-pick-item" data-svc="ต่อขนตา"       onclick="pickService(this)"><span class="svc-pick-icon">✨</span><span class="svc-pick-name">ต่อขนตา</span><span class="svc-pick-dur">120 นาที</span></div>
+              <div class="svc-pick-item" data-svc="สปามือ / เท้า" onclick="pickService(this)"><span class="svc-pick-icon">💆</span><span class="svc-pick-name">สปามือ/เท้า</span><span class="svc-pick-dur">60 นาที</span></div>
+              <div class="svc-pick-item" data-svc="แว็กขน"        onclick="pickService(this)"><span class="svc-pick-icon">🪮</span><span class="svc-pick-name">แว็กขน</span><span class="svc-pick-dur">45 นาที</span></div>
+              <div class="svc-pick-item" data-svc="หลายบริการ"    onclick="pickService(this)"><span class="svc-pick-icon">🌟</span><span class="svc-pick-name">หลายบริการ</span><span class="svc-pick-dur">150 นาที</span></div>
+            </div>
+            <!-- hidden input -->
+            <input type="hidden" id="b-service">
+          </div>
+          <div class="form-group">
+            <label class="form-label">หมายเหตุ (ไม่บังคับ)</label>
+            <textarea class="form-textarea" placeholder="เช่น ลาย ดีไซน์ หรือความต้องการพิเศษ..." id="b-note"></textarea>
+          </div>
+          <button class="bk-next-btn" onclick="goStep2()">เลือกวันและเวลา →</button>
         </div>
-        <button class="form-submit" onclick="submitBooking()">ส่งคำจองคิว →</button>
-        <p class="form-note">เราจะติดต่อกลับเพื่อยืนยันคิวภายใน 30 นาที</p>
-      </div>
+ 
+        <!-- ── STEP 2: เลือกวันที่ + slot ── -->
+        <div class="bk-panel hidden" id="bk-panel-2">
+          <div class="form-group">
+            <label class="form-label">เลือกวันที่</label>
+            <input class="form-input" type="date" id="b-date" onchange="loadSlots()">
+          </div>
+ 
+          <!-- Slot Grid -->
+          <div class="slot-section">
+            <label class="form-label">เลือกเวลา</label>
+            <div class="slot-hint" id="slot-hint">
+              <span class="slot-hint-dot available"></span>ว่าง
+              <span class="slot-hint-dot busy" style="margin-left:12px"></span>เต็มแล้ว
+            </div>
+            <div class="slot-grid" id="slot-grid">
+              <div class="slot-loading">📅 เลือกวันที่ก่อนนะคะ</div>
+            </div>
+            <input type="hidden" id="b-time">
+          </div>
+ 
+          <div style="display:flex;gap:12px;margin-top:20px;">
+            <button class="bk-back-btn" onclick="goStep1()">← กลับ</button>
+            <button class="bk-next-btn" style="flex:1" onclick="goStep3()">ตรวจสอบ →</button>
+          </div>
+        </div>
+ 
+        <!-- ── STEP 3: สรุปก่อนยืนยัน ── -->
+        <div class="bk-panel hidden" id="bk-panel-3">
+          <div class="bk-summary">
+            <div class="bk-summary-title">สรุปคำจอง</div>
+            <div class="bk-summary-row"><span>👤 ชื่อ</span><span id="sum-name">—</span></div>
+            <div class="bk-summary-row"><span>📞 โทร</span><span id="sum-phone">—</span></div>
+            <div class="bk-summary-row"><span>💅 บริการ</span><span id="sum-service">—</span></div>
+            <div class="bk-summary-row"><span>📆 วันที่</span><span id="sum-date">—</span></div>
+            <div class="bk-summary-row"><span>⏰ เวลา</span><span id="sum-time">—</span></div>
+            <div class="bk-summary-row" id="sum-note-row" style="display:none"><span>📝 หมายเหตุ</span><span id="sum-note">—</span></div>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:20px;">
+            <button class="bk-back-btn" onclick="goStep2()">← แก้ไข</button>
+            <button class="bk-next-btn" style="flex:1" id="bk-submit-btn" onclick="submitBooking()">✅ ยืนยันจองคิว</button>
+          </div>
+          <p class="form-note" style="margin-top:12px;">พนักงานจะได้รับแจ้งผ่าน LINE ทันทีค่ะ</p>
+        </div>
+ 
+      </div><!-- end booking-form -->
     </div>
   </div>
 </section>
@@ -1226,6 +1341,207 @@ function renderAdminGallery() {
 document.getElementById('admin-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeAdmin();
 });
+
+
+
+// ── Booking State ────────────────────────────────────────────
+var bkStep    = 1;
+var bkService = '';
+var bkDate    = '';
+var bkTime    = '';
+var slotsData = [];
+ 
+// ── Step Navigation ──────────────────────────────────────────
+function setStep(n) {
+  bkStep = n;
+  [1,2,3].forEach(function(i) {
+    var panel = document.getElementById('bk-panel-' + i);
+    var step  = document.getElementById('bk-step-'  + i);
+    if (panel) panel.classList.toggle('hidden', i !== n);
+    if (step)  {
+      step.classList.toggle('active', i === n);
+      step.classList.toggle('done',   i < n);
+    }
+  });
+}
+ 
+function goStep2() {
+  var name    = document.getElementById('b-name').value.trim();
+  var phone   = document.getElementById('b-phone').value.trim();
+  var service = document.getElementById('b-service').value;
+  if (!name)    { shakeField('b-name');    showToast('กรุณากรอกชื่อค่ะ', '', '⚠️'); return; }
+  if (!phone)   { shakeField('b-phone');   showToast('กรุณากรอกเบอร์โทรค่ะ', '', '⚠️'); return; }
+  if (!service) { showToast('กรุณาเลือกบริการก่อนนะคะ', '', '⚠️'); return; }
+  bkService = service;
+  setStep(2);
+  // ถ้ามีวันที่แล้ว โหลด slot ใหม่
+  var d = document.getElementById('b-date').value;
+  if (d) { bkDate = d; loadSlots(); }
+}
+ 
+function goStep1() { setStep(1); }
+ 
+function goStep3() {
+  var time = document.getElementById('b-time').value;
+  var date = document.getElementById('b-date').value;
+  if (!date) { showToast('กรุณาเลือกวันที่ค่ะ', '', '⚠️'); return; }
+  if (!time) { showToast('กรุณาเลือกเวลาค่ะ', '', '⚠️'); return; }
+  bkDate = date; bkTime = time;
+ 
+  // Fill summary
+  document.getElementById('sum-name').textContent    = document.getElementById('b-name').value;
+  document.getElementById('sum-phone').textContent   = document.getElementById('b-phone').value;
+  document.getElementById('sum-service').textContent = bkService;
+  document.getElementById('sum-date').textContent    = formatDateTH(bkDate);
+  document.getElementById('sum-time').textContent    = bkTime + ' น.';
+  var note = document.getElementById('b-note').value.trim();
+  if (note) {
+    document.getElementById('sum-note').textContent  = note;
+    document.getElementById('sum-note-row').style.display = 'flex';
+  }
+  setStep(3);
+}
+ 
+// ── Service Picker ────────────────────────────────────────────
+function pickService(el) {
+  document.querySelectorAll('.svc-pick-item').forEach(function(e) { e.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('b-service').value = el.getAttribute('data-svc');
+  bkService = el.getAttribute('data-svc');
+  // ถ้าอยู่ step 2 อยู่แล้ว → reload slots
+  if (bkStep === 2 && bkDate) loadSlots();
+}
+ 
+// ── Load Available Slots ──────────────────────────────────────
+async function loadSlots() {
+  var date    = document.getElementById('b-date').value;
+  var service = document.getElementById('b-service').value || bkService;
+  if (!date) return;
+ 
+  bkDate = date;
+  var grid = document.getElementById('slot-grid');
+  grid.innerHTML = '<div class="slot-loading"><span class="slot-spinner"></span>กำลังโหลดเวลาว่าง...</div>';
+  document.getElementById('b-time').value = '';
+  bkTime = '';
+ 
+  try {
+    var res = await api({ action: 'getAvailableSlots', date: date, service: service });
+    if (!res.ok) throw new Error(res.error);
+    slotsData = res.slots;
+    renderSlots(slotsData);
+  } catch (e) {
+    // Fallback: แสดง slot ทั้งหมดถ้า API ยังไม่พร้อม
+    var fallback = ['10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+    slotsData = fallback.map(function(t) { return { time: t, available: true }; });
+    renderSlots(slotsData);
+  }
+}
+ 
+function renderSlots(slots) {
+  var grid = document.getElementById('slot-grid');
+  if (!slots || !slots.length) {
+    grid.innerHTML = '<div class="slot-loading">ไม่มีเวลาว่างในวันนี้ค่ะ</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  var hasAvailable = false;
+  slots.forEach(function(s) {
+    if (s.available) hasAvailable = true;
+    var btn = document.createElement('button');
+    btn.className = 'slot-btn' + (!s.available ? ' busy' : '');
+    btn.textContent = s.time;
+    btn.disabled = !s.available;
+    btn.setAttribute('data-time', s.time);
+    if (s.available) {
+      btn.onclick = function() { selectSlot(this); };
+    }
+    grid.appendChild(btn);
+  });
+  if (!hasAvailable) {
+    grid.innerHTML = '<div class="slot-loading">😔 วันนี้เต็มทุก slot แล้วค่ะ กรุณาเลือกวันอื่น</div>';
+  }
+}
+ 
+function selectSlot(btn) {
+  document.querySelectorAll('.slot-btn').forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  bkTime = btn.getAttribute('data-time');
+  document.getElementById('b-time').value = bkTime;
+}
+ 
+// ── Submit Booking ────────────────────────────────────────────
+async function submitBooking() {
+  var name    = document.getElementById('b-name').value.trim();
+  var phone   = document.getElementById('b-phone').value.trim();
+  var service = document.getElementById('b-service').value;
+  var note    = document.getElementById('b-note').value.trim();
+ 
+  if (!name || !phone || !service || !bkDate || !bkTime) {
+    showToast('ข้อมูลไม่ครบ', 'กรุณาตรวจสอบอีกครั้งค่ะ', '⚠️');
+    return;
+  }
+ 
+  var btn = document.getElementById('bk-submit-btn');
+  btn.textContent = '⏳ กำลังส่งคำจอง...';
+  btn.disabled = true;
+ 
+  try {
+    var res = await api({ action: 'addBooking', name, phone, service, date: bkDate, time: bkTime, note });
+    if (res.ok) {
+      showToast('จองคิวสำเร็จ! 🎉', 'พนักงานได้รับแจ้งผ่าน LINE แล้วค่ะ', '✅');
+      // Reset form
+      ['b-name','b-phone','b-note'].forEach(function(id) { document.getElementById(id).value = ''; });
+      document.getElementById('b-service').value = '';
+      document.getElementById('b-date').value = '';
+      document.getElementById('b-time').value = '';
+      document.querySelectorAll('.svc-pick-item').forEach(function(e) { e.classList.remove('selected'); });
+      bkService = ''; bkDate = ''; bkTime = '';
+      setStep(1);
+    } else {
+      // Slot เต็ม — reload slots
+      if (res.slotFull && bkStep === 3) {
+        showToast('เวลานั้นเต็มแล้วค่ะ', 'กรุณาเลือกเวลาใหม่', '⚠️');
+        setStep(2);
+        loadSlots(); // โหลดใหม่ให้เห็น slot ที่เต็ม
+      } else {
+        showToast('เกิดข้อผิดพลาด', res.error || 'กรุณาลองใหม่', '❌');
+      }
+    }
+  } catch (e) {
+    showToast('เกิดข้อผิดพลาด', 'กรุณาลองใหม่ค่ะ', '❌');
+  } finally {
+    btn.textContent = '✅ ยืนยันจองคิว';
+    btn.disabled = false;
+  }
+}
+ 
+// ── Helpers ───────────────────────────────────────────────────
+function formatDateTH(dateStr) {
+  if (!dateStr) return '-';
+  var parts = dateStr.split('-');
+  var d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  var days  = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+  var months= ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return 'วัน' + days[d.getDay()] + 'ที่ ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + (d.getFullYear()+543);
+}
+ 
+function shakeField(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.style.animation = 'none';
+  el.style.borderColor = 'var(--rose)';
+  setTimeout(function() { el.style.borderColor = ''; }, 1500);
+}
+ 
+// setMinDate override — ใช้ b-date
+(function() {
+  var inp = document.getElementById('b-date');
+  if (inp) {
+    var today = new Date().toISOString().split('T')[0];
+    inp.min = today;
+    inp.value = today;
+  }
+})();
 
 // ── START ─────────────────────────────────────────────────────
 init();
