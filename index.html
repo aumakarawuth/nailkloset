@@ -461,7 +461,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
       <div class="svc-card" onclick="scrollToBooking()">
         <div class="svc-img">
           <img
-            src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80"
+            src="https://picsum.photos/id/325/600/400"
             alt="ทำเล็บ"
             onerror="this.parentElement.innerHTML='<div class=\'svc-img-placeholder\'>💅</div>'"
           >
@@ -481,7 +481,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
       <div class="svc-card" onclick="scrollToBooking()">
         <div class="svc-img">
           <img
-            src="https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=80"
+            src="https://picsum.photos/id/447/600/400"
             alt="ต่อขนตา"
             onerror="this.parentElement.innerHTML='<div class=\'svc-img-placeholder\'>✨</div>'"
           >
@@ -501,7 +501,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
       <div class="svc-card" onclick="scrollToBooking()">
         <div class="svc-img">
           <img
-            src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80"
+            src="https://picsum.photos/id/433/600/400"
             alt="สปามือเท้า"
             onerror="this.parentElement.innerHTML='<div class=\'svc-img-placeholder\'>💆</div>'"
           >
@@ -521,7 +521,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:60px 0 32px;}
       <div class="svc-card" onclick="scrollToBooking()">
         <div class="svc-img">
           <img
-            src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80"
+            src="https://picsum.photos/id/614/600/400"
             alt="แว็กขน"
             onerror="this.parentElement.innerHTML='<div class=\'svc-img-placeholder\'>🪮</div>'"
           >
@@ -867,18 +867,18 @@ async function api(params) {
 
 // ── รูป Unsplash สำหรับโปรโมชั่น default ──────────────────────
 const DEFAULT_PROMOS = [
-  {id:1,img:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',title:'Happy Hour เล็บ',desc:'ทำเล็บเจลทุกแบบ ลด 20% เฉพาะช่วง 10:00-12:00 น. วันจันทร์-ศุกร์',price:240,oldPrice:300,badge:'hot',expire:'2025-12-31'},
-  {id:2,img:'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=80',title:'ต่อขนตา Classic Set',desc:'ต่อขนตา Classic พร้อมฟรี! บำรุงขนตาราคาพิเศษ สำหรับลูกค้าใหม่',price:490,oldPrice:650,badge:'new',expire:'2025-08-31'},
-  {id:3,img:'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80',title:'Spa Duo Package',desc:'สปามือ + สปาเท้า คู่กัน พร้อม mask บำรุงผิว ราคาพิเศษ',price:600,oldPrice:800,badge:'gold',expire:'2025-09-30'},
+  {id:1,img:'https://picsum.photos/id/325/600/400',title:'Happy Hour เล็บ',desc:'ทำเล็บเจลทุกแบบ ลด 20% เฉพาะช่วง 10:00-12:00 น. วันจันทร์-ศุกร์',price:240,oldPrice:300,badge:'hot',expire:'2025-12-31'},
+  {id:2,img:'https://picsum.photos/id/447/600/400',title:'ต่อขนตา Classic Set',desc:'ต่อขนตา Classic พร้อมฟรี! บำรุงขนตาราคาพิเศษ สำหรับลูกค้าใหม่',price:490,oldPrice:650,badge:'new',expire:'2025-08-31'},
+  {id:3,img:'https://picsum.photos/id/433/600/400',title:'Spa Duo Package',desc:'สปามือ + สปาเท้า คู่กัน พร้อม mask บำรุงผิว ราคาพิเศษ',price:600,oldPrice:800,badge:'gold',expire:'2025-09-30'},
 ];
 
 const DEFAULT_GALLERY = [
-  {id:1,url:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',cat:'nail',label:'French Gel Nail'},
-  {id:2,url:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',cat:'nail',label:'Marble Art'},
-  {id:3,url:'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=80',cat:'lash',label:'Classic Lash Set'},
-  {id:4,url:'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&q=80',cat:'nail',label:'Ombre Gradient'},
-  {id:5,url:'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80',cat:'spa',label:'Spa Luxury'},
-  {id:6,url:'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=600&q=80',cat:'lash',label:'Volume Lash'},
+  {id:1,url:'https://picsum.photos/id/325/600/400',cat:'nail',label:'French Gel Nail'},
+  {id:2,url:'https://picsum.photos/id/325/600/400',cat:'nail',label:'Marble Art'},
+  {id:3,url:'https://picsum.photos/id/447/600/400',cat:'lash',label:'Classic Lash Set'},
+  {id:4,url:'https://picsum.photos/id/325/600/400',cat:'nail',label:'Ombre Gradient'},
+  {id:5,url:'https://picsum.photos/id/433/600/400',cat:'spa',label:'Spa Luxury'},
+  {id:6,url:'https://picsum.photos/id/447/600/400',cat:'lash',label:'Volume Lash'},
 ];
 
 const galColors = [
