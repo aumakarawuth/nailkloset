@@ -908,8 +908,12 @@ async function init() {
 
 function setMinDate() {
   const inp = document.getElementById('b-date');
-  const today = new Date().toISOString().split('T')[0];
-  inp.min = today; inp.value = today;
+  const today = new Date();
+  const maxDate = new Date();
+  maxDate.setDate(today.getDate() + 14); // จองล่วงหน้าได้ไม่เกิน 2 อาทิตย์
+  inp.min = today.toISOString().split('T')[0];
+  inp.max = maxDate.toISOString().split('T')[0];
+  inp.value = today.toISOString().split('T')[0];
 }
 
 window.addEventListener('scroll', () => {
