@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#FF6B9D">
+<title>Nail Kloset — จองคิว</title>
+
+<!-- LINE LIFF SDK -->
+<script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+<!-- Google Fonts: Google Sans alternative (Nunito + Poppins) -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Poppins:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════════════════════════════════════════
+   DESIGN SYSTEM — Nail Kloset: Bright & Fresh
+   ══════════════════════════════════════════════ */
+:root {
+  --pink:        #FF6B9D;
+  --pink2:       #FF4785;
+  --pink-light:  #FFE4EF;
+  --pink-pale:   #FFF5F9;
+  --pink-border: rgba(255,107,157,0.2);
+  --sky:         #38BDF8;
+  --sky-light:   #E0F6FF;
+  --mint:        #2DD4BF;
+  --mint-light:  #CCFBF1;
+  --gold:        #FBBF24;
+  --gold-light:  #FEF3C7;
+  --purple:      #A78BFA;
+  --purple-light:#EDE9FE;
+  --green:       #10B981;
+  --green-light: #D1FAE5;
+  --white:       #FFFFFF;
+  --bg:          #F8FAFF;
+  --bg2:         #F0F4FF;
+  --surface:     #FFFFFF;
+  --text:        #1E293B;
+  --text2:       #475569;
+  --text3:       #94A3B8;
+  --border:      #E2E8F0;
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.06);
+  --shadow:      0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg:   0 8px 40px rgba(0,0,0,0.12);
+  --radius:      20px;
+  --radius-sm:   12px;
+  --radius-xs:   8px;
+  --ff:          'Nunito', sans-serif;
+  --ff2:         'Poppins', sans-serif;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: var(--ff);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LOADING ─────────────────────────────────── */
+#loading-screen {
+  position: fixed; inset: 0; z-index: 1000;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FF9AC7 50%, #FFB3D9 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.5s, transform 0.5s;
+}
+#loading-screen.out { opacity:0; pointer-events:none; transform: scale(1.05); }
+.loading-logo {
+  font-family: var(--ff2);
+  font-size: 38px; font-weight: 700;
+  color: #fff; letter-spacing: -1px;
+  margin-bottom: 6px;
+  animation: popUp 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+.loading-sub {
+  font-size: 13px; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,0.8);
+  margin-bottom: 40px;
+  animation: popUp 0.6s 0.1s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+.loading-dots {
+  display: flex; gap: 8px;
+  animation: popUp 0.6s 0.2s ease both;
+}
+.loading-dots span {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  animation: bounce 1s ease infinite;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.15s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounce { 0%,80%,100%{transform:scale(0.6);opacity:0.5} 40%{transform:scale(1);opacity:1} }
+@keyframes popUp  { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SUCCESS SCREEN ──────────────────────────── */
+#success-screen {
+  position: fixed; inset: 0; z-index: 900;
+  background: linear-gradient(160deg, #E0F6FF 0%, #F0FFF4 50%, #FFF5F9 100%);
+  display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px; text-align: center;
+}
+#success-screen.show { display: flex; }
+.success-anim {
+  width: 96px; height: 96px; border-radius: 50%;
+  background: linear-gradient(135deg, #10B981, #34D399);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin-bottom: 24px;
+  box-shadow: 0 12px 40px rgba(16,185,129,0.35);
+  animation: popUp 0.6s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+.success-title {
+  font-family: var(--ff2); font-size: 28px; font-weight: 700;
+  color: var(--text); margin-bottom: 8px;
+}
+.success-sub { font-size: 15px; color: var(--text2); line-height: 1.7; margin-bottom: 28px; }
+.success-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 22px; width: 100%; max-width: 340px;
+  margin-bottom: 24px; text-align: left;
+  box-shadow: var(--shadow);
+}
+.success-card-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+}
+.success-card-row:last-child { border-bottom: none; }
+.sc-label { color: var(--text3); font-weight: 500; }
+.sc-value  { font-weight: 700; color: var(--text); text-align: right; max-width: 56%; }
+.bk-id-badge {
+  font-size: 11px; color: var(--text3); margin-bottom: 20px;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* ── HEADER ──────────────────────────────────── */
+.app-header {
+  background: linear-gradient(135deg, #FF6B9D 0%, #FF9AC7 100%);
+  padding: 20px 20px 16px;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 4px 20px rgba(255,107,157,0.3);
+}
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.app-logo {
+  font-family: var(--ff2); font-size: 24px; font-weight: 700;
+  color: #fff; letter-spacing: -0.5px;
+}
+.app-logo span { opacity: 0.7; font-size: 13px; font-weight: 400; display: block; letter-spacing: 0; }
+.user-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50px; padding: 5px 12px 5px 5px;
+  backdrop-filter: blur(8px);
+}
+.user-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: 2px solid rgba(255,255,255,0.6);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; font-size: 12px; flex-shrink: 0;
+}
+.user-avatar img { width:100%; height:100%; object-fit:cover; }
+.user-chip-name { font-size: 12px; font-weight: 600; color: #fff; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ── STEP RAIL ───────────────────────────────── */
+.step-rail {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.15); border-radius: 50px;
+  padding: 8px 14px; gap: 0;
+}
+.step {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 3px; position: relative;
+}
+.step:not(:last-child)::after {
+  content: ''; position: absolute;
+  top: 12px; left: calc(50% + 14px); right: calc(-50% + 14px);
+  height: 2px;
+  background: rgba(255,255,255,0.3);
+  transition: background 0.3s;
+}
+.step.done:not(:last-child)::after { background: rgba(255,255,255,0.8); }
+.step-node {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+  background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7);
+  position: relative; z-index: 1;
+  transition: all 0.3s;
+}
+.step.active .step-node {
+  background: #fff; color: var(--pink); font-weight: 900;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.3);
+}
+.step.done .step-node { background: rgba(255,255,255,0.9); color: var(--pink2); }
+.step-label { font-size: 10px; color: rgba(255,255,255,0.7); font-weight: 600; }
+.step.active .step-label { color: #fff; font-weight: 800; }
+.step.done  .step-label { color: rgba(255,255,255,0.9); }
+
+/* ── PAGES ───────────────────────────────────── */
+.page { display: none; padding: 20px 16px 110px; animation: fadeSlide 0.3s ease both; }
+.page.active { display: block; }
+@keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+.page-header { margin-bottom: 22px; }
+.page-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--pink-light); color: var(--pink2);
+  font-size: 11px; font-weight: 800; letter-spacing: 1px;
+  text-transform: uppercase; padding: 5px 12px;
+  border-radius: 50px; margin-bottom: 12px;
+}
+.page-title {
+  font-family: var(--ff2); font-size: 26px; font-weight: 700;
+  color: var(--text); line-height: 1.2; margin-bottom: 6px;
+}
+.page-title em { font-style: normal; color: var(--pink); }
+.page-sub { font-size: 14px; color: var(--text3); font-weight: 500; }
+
+/* ── SERVICE CARDS ───────────────────────────── */
+.service-list { display: flex; flex-direction: column; gap: 12px; }
+.service-card {
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.service-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 4px;
+  background: transparent; border-radius: 4px 0 0 4px;
+  transition: background 0.2s;
+}
+.service-card:active { transform: scale(0.98); }
+.service-card.selected {
+  border-color: var(--pink);
+  background: var(--pink-pale);
+  box-shadow: 0 4px 20px rgba(255,107,157,0.15);
+}
+.service-card.selected::before { background: var(--pink); }
+.svc-icon-wrap {
+  width: 52px; height: 52px; border-radius: 16px;
+  background: var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+  transition: background 0.2s;
+}
+.service-card.selected .svc-icon-wrap { background: var(--pink-light); }
+.svc-info { flex: 1; min-width: 0; }
+.svc-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+.svc-meta { font-size: 12px; color: var(--text3); font-weight: 500; }
+.svc-price {
+  font-size: 15px; font-weight: 800; color: var(--pink);
+  text-align: right; flex-shrink: 0;
+}
+.svc-price small { display: block; font-size: 10px; font-weight: 500; color: var(--text3); }
+.check-badge {
+  position: absolute; top: 10px; right: 10px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--pink); display: none;
+  align-items: center; justify-content: center;
+  color: #fff; font-size: 12px; font-weight: 800;
+}
+.service-card.selected .check-badge { display: flex; }
+
+/* ── STAFF GRID ──────────────────────────────── */
+.staff-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.staff-card {
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 18px 14px;
+  cursor: pointer; transition: all 0.2s;
+  text-align: center; position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.staff-card:active { transform: scale(0.97); }
+.staff-card.selected {
+  border-color: var(--pink); background: var(--pink-pale);
+  box-shadow: 0 4px 20px rgba(255,107,157,0.15);
+}
+.staff-card.any-card {
+  grid-column: 1 / -1; display: flex;
+  align-items: center; gap: 14px;
+  text-align: left; padding: 16px 18px;
+  background: linear-gradient(135deg, var(--sky-light), #E0F6FF);
+  border-color: var(--sky);
+}
+.staff-card.any-card.selected {
+  border-color: var(--pink); background: var(--pink-pale);
+}
+.staff-ava {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--pink-light), var(--purple-light));
+  border: 3px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: var(--pink);
+  margin: 0 auto 10px; overflow: hidden;
+  font-family: var(--ff2);
+}
+.any-card .staff-ava {
+  margin: 0; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--sky-light), #BAE6FD);
+  border-color: var(--sky); color: #0284C7;
+}
+.staff-ava img { width:100%; height:100%; object-fit:cover; }
+.staff-name { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+.staff-role { font-size: 12px; color: var(--text3); font-weight: 500; }
+.staff-check {
+  position: absolute; top: 8px; right: 8px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--pink); display: none;
+  align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 800;
+}
+.staff-card.selected .staff-check { display: flex; }
+
+/* ── CALENDAR ────────────────────────────────── */
+.cal-wrap {
+  background: var(--white); border-radius: var(--radius);
+  padding: 20px; margin-bottom: 20px;
+  box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+}
+.cal-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 20px;
+}
+.cal-month-lbl {
+  font-family: var(--ff2); font-size: 18px; font-weight: 700; color: var(--text);
+}
+.cal-nav {
+  width: 38px; height: 38px; border-radius: var(--radius-xs);
+  border: 2px solid var(--border); background: var(--bg);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--text2); transition: all 0.2s;
+}
+.cal-nav:hover { border-color: var(--pink); color: var(--pink); background: var(--pink-pale); }
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7,1fr);
+  gap: 4px; margin-bottom: 0;
+}
+.cal-dow {
+  text-align: center; font-size: 11px; font-weight: 700;
+  color: var(--text3); padding: 6px 0; letter-spacing: 0.5px;
+}
+.cal-day {
+  aspect-ratio: 1; border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  color: var(--text2); transition: all 0.2s;
+  border: 2px solid transparent;
+}
+.cal-day:hover:not(.disabled):not(.empty) {
+  background: var(--pink-pale); color: var(--pink); border-color: var(--pink-border);
+}
+.cal-day.today { color: var(--pink); font-weight: 900; }
+.cal-day.today::after {
+  content: ''; position: absolute; bottom: 2px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--pink);
+}
+.cal-day { position: relative; }
+.cal-day.selected {
+  background: var(--pink) !important; color: #fff !important;
+  border-color: var(--pink) !important; font-weight: 800;
+  box-shadow: 0 4px 12px rgba(255,107,157,0.4);
+}
+.cal-day.disabled { color: var(--border); cursor: not-allowed; }
+.cal-day.empty    { cursor: default; }
+
+/* ── TIME SLOTS ──────────────────────────────── */
+.time-section { margin-top: 20px; }
+.time-section-hd {
+  font-size: 12px; font-weight: 800; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.time-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.time-slot {
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 8px;
+  text-align: center; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+  color: var(--text2); box-shadow: var(--shadow-sm);
+}
+.time-slot:hover:not(.unavailable) {
+  border-color: var(--pink); color: var(--pink);
+  background: var(--pink-pale);
+}
+.time-slot.selected {
+  background: var(--pink) !important; border-color: var(--pink) !important;
+  color: #fff !important; font-weight: 800;
+  box-shadow: 0 4px 16px rgba(255,107,157,0.4);
+}
+.time-slot.unavailable {
+  background: var(--bg2); color: var(--border);
+  cursor: not-allowed; border-color: transparent;
+  text-decoration: line-through;
+}
+.time-end {
+  display: block; font-size: 10px; opacity: 0.7;
+  margin-top: 2px; font-weight: 500;
+}
+.time-loading { padding: 24px 0; text-align: center; }
+.time-loading-shimmer {
+  height: 50px; border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--border) 25%, var(--bg2) 50%, var(--border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease infinite; margin-bottom: 8px;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.no-date-msg {
+  text-align: center; padding: 32px 0;
+  color: var(--text3); font-size: 14px; font-weight: 500;
+}
+
+/* ── CONFIRM PAGE ────────────────────────────── */
+.profile-card {
+  background: linear-gradient(135deg, var(--pink-pale), var(--sky-light));
+  border: 2px solid var(--pink-border); border-radius: var(--radius);
+  padding: 16px 18px; display: flex; align-items: center;
+  gap: 14px; margin-bottom: 20px;
+}
+.profile-ava {
+  width: 54px; height: 54px; border-radius: 50%;
+  background: var(--pink-light); border: 3px solid var(--pink-border);
+  overflow: hidden; display: flex; align-items: center;
+  justify-content: center; font-size: 22px; flex-shrink: 0;
+}
+.profile-ava img { width:100%; height:100%; object-fit:cover; }
+.profile-name { font-size: 16px; font-weight: 800; color: var(--text); }
+.profile-sub  { font-size: 12px; color: var(--pink); font-weight: 600; }
+
+.form-label { font-size: 13px; font-weight: 700; color: var(--text2); margin-bottom: 8px; display: block; }
+.form-input {
+  width: 100%; background: var(--white);
+  border: 2px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px 16px; font-size: 15px; font-family: var(--ff);
+  color: var(--text); outline: none; margin-bottom: 18px;
+  transition: border-color 0.2s; -webkit-appearance: none;
+  font-weight: 600;
+}
+.form-input:focus { border-color: var(--pink); }
+.form-input::placeholder { color: var(--text3); font-weight: 400; }
+.form-input.error { border-color: #EF4444; }
+.form-textarea { resize: none; height: 80px; }
+
+.summary-card {
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  margin-bottom: 20px; box-shadow: var(--shadow-sm);
+}
+.summary-head {
+  background: linear-gradient(135deg, var(--pink), var(--pink2));
+  padding: 18px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.summary-head-icon { font-size: 24px; }
+.summary-head-title { font-family: var(--ff2); font-size: 17px; font-weight: 700; color: #fff; }
+.summary-head-sub   { font-size: 11px; color: rgba(255,255,255,0.75); margin-top: 1px; }
+.summary-body { padding: 18px 20px; }
+.sum-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+}
+.sum-row:last-child { border-bottom: none; }
+.sum-label { font-size: 13px; color: var(--text3); font-weight: 600; }
+.sum-value { font-size: 14px; font-weight: 800; color: var(--text); text-align: right; max-width: 62%; }
+.sum-price-big { font-family: var(--ff2); font-size: 28px; font-weight: 800; color: var(--pink); }
+
+.policy-box {
+  background: var(--gold-light); border: 2px solid #FDE68A;
+  border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 20px;
+}
+.policy-box p { font-size: 13px; color: #92400E; font-weight: 600; line-height: 1.7; }
+
+/* ── MY BOOKINGS ─────────────────────────────── */
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 2px; }
+.tab-btn {
+  padding: 10px 18px; border-radius: 50px;
+  border: 2px solid var(--border); background: var(--white);
+  font-family: var(--ff); font-size: 13px; font-weight: 700;
+  color: var(--text3); cursor: pointer; white-space: nowrap;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.tab-btn.active { background: var(--pink); border-color: var(--pink); color: #fff; }
+.booking-item {
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 18px; margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.bk-service { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.bk-details { font-size: 13px; color: var(--text2); line-height: 1.8; font-weight: 500; }
+.bk-status {
+  font-size: 11px; font-weight: 800; padding: 4px 10px;
+  border-radius: 50px; letter-spacing: 0.3px;
+}
+.bk-pending   { background: var(--gold-light);   color: #B45309; }
+.bk-confirmed { background: var(--green-light);  color: #065F46; }
+.bk-cancelled { background: var(--bg2);          color: var(--text3); }
+.bk-completed { background: var(--sky-light);    color: #0369A1; }
+.bk-cancel-btn {
+  margin-top: 14px; width: 100%; background: transparent;
+  border: 2px solid #FCA5A5; border-radius: 50px; padding: 10px;
+  font-family: var(--ff); font-size: 13px; font-weight: 700;
+  color: #EF4444; cursor: pointer; transition: all 0.2s;
+}
+.bk-cancel-btn:hover { background: #FEF2F2; }
+
+/* ── BUTTONS ─────────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, var(--pink), var(--pink2));
+  color: #fff; border: none; border-radius: 50px;
+  padding: 17px; font-size: 16px; font-weight: 800;
+  font-family: var(--ff); cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 24px rgba(255,107,157,0.4);
+  letter-spacing: 0.3px;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,107,157,0.5); }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; transform: none; box-shadow: none; cursor: not-allowed; }
+.btn-secondary {
+  width: 100%; background: var(--white);
+  color: var(--text2); border: 2px solid var(--border);
+  border-radius: 50px; padding: 15px;
+  font-size: 15px; font-weight: 700; font-family: var(--ff);
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--pink-border); color: var(--pink); }
+.btn-icon {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+}
+.btn-icon:hover { border-color: var(--pink-border); }
+
+/* ── BOTTOM BAR ──────────────────────────────── */
+.bottom-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: linear-gradient(0deg, rgba(248,250,255,0.98) 80%, transparent);
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  z-index: 40; display: flex; gap: 10px; align-items: center;
+  backdrop-filter: blur(12px);
+}
+.bottom-svc-info { flex: 1; min-width: 0; }
+.bottom-svc-name {
+  font-size: 12px; color: var(--text3); font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bottom-svc-price { font-size: 17px; font-weight: 800; color: var(--pink); }
+.bottom-next {
+  background: linear-gradient(135deg, var(--pink), var(--pink2));
+  color: #fff; border: none; border-radius: 50px;
+  padding: 14px 28px; font-size: 15px; font-weight: 800;
+  font-family: var(--ff); cursor: pointer; white-space: nowrap;
+  transition: all 0.2s; box-shadow: 0 4px 18px rgba(255,107,157,0.4);
+}
+.bottom-next:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+.bottom-next:not(:disabled):active { transform: scale(0.97); }
+
+/* ── SHORTCUT CARD ───────────────────────────── */
+.shortcut-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 16px;
+  cursor: pointer; transition: all 0.2s; margin-top: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.shortcut-card:hover { border-color: var(--pink-border); }
+.shortcut-icon { font-size: 22px; }
+
+/* ── TOAST ───────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 90px; left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: var(--text); color: #fff;
+  padding: 12px 22px; border-radius: 50px;
+  font-size: 13px; font-weight: 700;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 500; white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── MISC ────────────────────────────────────── */
+.divider { height: 1px; background: var(--border); margin: 20px 0; }
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+.empty-icon  { font-size: 44px; display: block; margin-bottom: 12px; }
+.scroll-pad  { height: 80px; }
+.section-tip {
+  background: var(--sky-light); border: 2px solid #BAE6FD;
+  border-radius: var(--radius-sm); padding: 12px 16px;
+  font-size: 13px; color: #0369A1; font-weight: 600;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+}
+
+/* ── MAX WIDTH ───────────────────────────────── */
+#app { max-width: 480px; margin: 0 auto; min-height: 100vh; }
+
+@media(max-width:360px) {
+  .time-grid { grid-template-columns: repeat(2,1fr); }
+  .page-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loading-logo">💅 Nail Kloset</div>
+  <div class="loading-sub">The Crystal Ratchapruek</div>
+  <div class="loading-dots">
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<!-- Success Screen -->
+<div id="success-screen">
+  <div class="success-anim">✅</div>
+  <div class="success-title">จองสำเร็จแล้วค่ะ!</div>
+  <div class="success-sub">ร้านได้รับการจองของคุณแล้ว<br>รอการยืนยันทาง LINE นะคะ 💕</div>
+  <div class="success-card" id="success-detail"></div>
+  <div class="bk-id-badge" id="success-bk-id"></div>
+  <div class="policy-box" style="max-width:340px;text-align:center;margin-bottom:24px;">
+    <p>⚠️ กรุณาแจ้งยกเลิกล่วงหน้าอย่างน้อย <strong>2 ชั่วโมง</strong> ขอบคุณค่ะ</p>
+  </div>
+  <button class="btn-primary" style="max-width:340px" onclick="closeWindow()">เสร็จสิ้น ✨</button>
+</div>
+
+<!-- Main App -->
+<div id="app">
+
+  <!-- Header -->
+  <div class="app-header">
+    <div class="header-top">
+      <div class="app-logo">
+        Nail Kloset
+        <span>The Crystal Ratchapruek</span>
+      </div>
+      <div class="user-chip" id="user-chip" style="display:none">
+        <div class="user-avatar" id="user-avatar">💅</div>
+        <div class="user-chip-name" id="user-chip-name">—</div>
+      </div>
+    </div>
+    <!-- Step Rail -->
+    <div class="step-rail" id="step-rail">
+      <div class="step active" id="sr-1"><div class="step-node">1</div><div class="step-label">บริการ</div></div>
+      <div class="step" id="sr-2"><div class="step-node">2</div><div class="step-label">ช่าง</div></div>
+      <div class="step" id="sr-3"><div class="step-node">3</div><div class="step-label">วัน/เวลา</div></div>
+      <div class="step" id="sr-4"><div class="step-node">4</div><div class="step-label">ยืนยัน</div></div>
+    </div>
+  </div>
+
+  <!-- ── PAGE 1: บริการ ── -->
+  <div class="page active" id="page-1">
+    <div class="page-header">
+      <div class="page-tag">✨ Step 1 of 4</div>
+      <div class="page-title">เลือก<em>บริการ</em>ที่ต้องการ</div>
+      <div class="page-sub">เลือกได้ 1 บริการต่อการจอง</div>
+    </div>
+
+    <div class="service-list" id="service-list">
+      <!-- shimmer -->
+      <div style="height:80px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
+      <div style="height:80px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s 0.1s ease infinite;"></div>
+      <div style="height:80px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s 0.2s ease infinite;"></div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="shortcut-card" onclick="goMyBookings()">
+      <div class="shortcut-icon">📋</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:800;color:var(--text)">ดูการจองของฉัน</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px;font-weight:500">ตรวจสอบสถานะและประวัติ</div>
+      </div>
+      <div style="color:var(--text3);font-size:20px">›</div>
+    </div>
+
+    <div class="scroll-pad"></div>
+    <div class="bottom-bar">
+      <div class="bottom-svc-info">
+        <div class="bottom-svc-name" id="bn-svc-name">เลือกบริการก่อนนะคะ</div>
+        <div class="bottom-svc-price" id="bn-svc-price">—</div>
+      </div>
+      <button class="bottom-next" id="next-1" disabled onclick="goStep(2)">ถัดไป →</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE 2: ช่าง ── -->
+  <div class="page" id="page-2">
+    <div class="page-header">
+      <div class="page-tag">💇‍♀️ Step 2 of 4</div>
+      <div class="page-title">เลือก<em>ช่าง</em>ที่ต้องการ</div>
+      <div class="page-sub">หรือเลือก "ใครทำก็ได้" ให้ระบบจัดให้ค่ะ</div>
+    </div>
+
+    <div class="staff-grid" id="staff-grid">
+      <div style="height:120px;grid-column:1/-1;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
+      <div style="height:130px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
+      <div style="height:130px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s 0.1s ease infinite;"></div>
+    </div>
+
+    <div class="scroll-pad"></div>
+    <div class="bottom-bar">
+      <button class="btn-icon" onclick="goStep(1)">←</button>
+      <button class="bottom-next" id="next-2" disabled onclick="goStep(3)" style="flex:1">ถัดไป →</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE 3: วัน/เวลา ── -->
+  <div class="page" id="page-3">
+    <div class="page-header">
+      <div class="page-tag">📅 Step 3 of 4</div>
+      <div class="page-title">เลือก<em>วัน</em>และ<em>เวลา</em></div>
+      <div class="page-sub">จองล่วงหน้าได้ 30 วัน</div>
+    </div>
+
+    <div class="section-tip">
+      💡 กรุณาเลือกวันที่ต้องการก่อน แล้วเลือกเวลาค่ะ
+    </div>
+
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="changeCalMonth(-1)">‹</button>
+        <div class="cal-month-lbl" id="cal-month-lbl">—</div>
+        <button class="cal-nav" onclick="changeCalMonth(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- Time slots -->
+    <div id="time-slots-wrap" style="display:none">
+      <div class="time-section">
+        <div class="time-section-hd">🌅 ช่วงเช้า</div>
+        <div class="time-grid" id="slots-morning"></div>
+      </div>
+      <div class="time-section">
+        <div class="time-section-hd">☀️ ช่วงบ่าย</div>
+        <div class="time-grid" id="slots-afternoon"></div>
+      </div>
+      <div class="time-section">
+        <div class="time-section-hd">🌇 ช่วงเย็น</div>
+        <div class="time-grid" id="slots-evening"></div>
+      </div>
+    </div>
+
+    <div id="time-loading" class="time-loading" style="display:none">
+      <div class="time-grid">
+        <div class="time-loading-shimmer"></div>
+        <div class="time-loading-shimmer"></div>
+        <div class="time-loading-shimmer"></div>
+        <div class="time-loading-shimmer"></div>
+        <div class="time-loading-shimmer"></div>
+        <div class="time-loading-shimmer"></div>
+      </div>
+    </div>
+
+    <div class="no-date-msg" id="no-date-msg">
+      👆 กรุณาเลือกวันที่ก่อนนะคะ
+    </div>
+
+    <div class="scroll-pad"></div>
+    <div class="bottom-bar">
+      <button class="btn-icon" onclick="goStep(2)">←</button>
+      <button class="bottom-next" id="next-3" disabled onclick="goStep(4)" style="flex:1">ถัดไป →</button>
+    </div>
+  </div>
+
+  <!-- ── PAGE 4: ยืนยัน ── -->
+  <div class="page" id="page-4">
+    <div class="page-header">
+      <div class="page-tag">✅ Step 4 of 4</div>
+      <div class="page-title">ตรวจสอบ<em>ข้อมูล</em>การจอง</div>
+      <div class="page-sub">กรุณาตรวจสอบให้ถูกต้องก่อนยืนยันค่ะ</div>
+    </div>
+
+    <!-- Profile -->
+    <div class="profile-card" id="profile-card">
+      <div class="profile-ava" id="liff-profile-ava">💅</div>
+      <div>
+        <div class="profile-name" id="liff-profile-name">—</div>
+        <div class="profile-sub">ลูกค้า Nail Kloset ✨</div>
+      </div>
+    </div>
+
+    <!-- Phone -->
+    <label class="form-label">📞 เบอร์โทรศัพท์</label>
+    <input type="tel" class="form-input" id="phone-input"
+      placeholder="0812345678" maxlength="10" autocomplete="tel">
+
+    <!-- Summary -->
+    <div class="summary-card">
+      <div class="summary-head">
+        <span class="summary-head-icon">💅</span>
+        <div>
+          <div class="summary-head-title">Nail Kloset</div>
+          <div class="summary-head-sub">The Crystal Ratchapruek</div>
+        </div>
+      </div>
+      <div class="summary-body">
+        <div class="sum-row">
+          <div class="sum-label">บริการ</div>
+          <div class="sum-value" id="sum-service">—</div>
+        </div>
+        <div class="sum-row">
+          <div class="sum-label">ช่าง</div>
+          <div class="sum-value" id="sum-staff">—</div>
+        </div>
+        <div class="sum-row">
+          <div class="sum-label">วันที่</div>
+          <div class="sum-value" id="sum-date">—</div>
+        </div>
+        <div class="sum-row">
+          <div class="sum-label">เวลา</div>
+          <div class="sum-value" id="sum-time">—</div>
+        </div>
+        <div class="sum-row">
+          <div class="sum-label">ระยะเวลา</div>
+          <div class="sum-value" id="sum-duration">—</div>
+        </div>
+        <div class="sum-row">
+          <div class="sum-label">ราคาประมาณ</div>
+          <div class="sum-value"><div class="sum-price-big" id="sum-price">—</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <label class="form-label">📝 หมายเหตุ (ถ้ามี)</label>
+    <textarea class="form-input form-textarea" id="note-input"
+      placeholder="เช่น สีที่ต้องการ, รูปแบบ, แพ้สาร..."></textarea>
+
+    <!-- Policy -->
+    <div class="policy-box">
+      <p>⚠️ กรุณาแจ้งยกเลิกหรือเลื่อนนัดล่วงหน้าอย่างน้อย <strong>2 ชั่วโมง</strong><br>
+      เพื่อรักษาสิทธิ์การจองในครั้งต่อไปค่ะ</p>
+    </div>
+
+    <button class="btn-primary" id="confirm-btn" onclick="submitBooking()">
+      💕 ยืนยันการจองนัด
+    </button>
+    <div style="height:12px"></div>
+    <button class="btn-secondary" onclick="goStep(3)">← แก้ไข</button>
+    <div class="scroll-pad"></div>
+  </div>
+
+  <!-- ── PAGE MY BOOKINGS ── -->
+  <div class="page" id="page-mybk">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <button class="btn-icon" onclick="goStep(1)">←</button>
+      <div>
+        <div class="page-title" style="font-size:22px;margin-bottom:0">การจองของฉัน</div>
+        <div class="page-sub" style="margin-bottom:0;font-size:12px">ประวัติและสถานะทั้งหมด</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="filterBookings('all',this)">ทั้งหมด</button>
+      <button class="tab-btn" onclick="filterBookings('pending',this)">รอยืนยัน</button>
+      <button class="tab-btn" onclick="filterBookings('confirmed',this)">ยืนยันแล้ว</button>
+      <button class="tab-btn" onclick="filterBookings('completed',this)">เสร็จสิ้น</button>
+    </div>
+    <div id="mybk-list">
+      <div style="height:120px;border-radius:20px;margin-bottom:12px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
+      <div style="height:120px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>
+    </div>
+    <div class="scroll-pad"></div>
+  </div>
+
+</div><!-- /app -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════
+// CONFIG — เปลี่ยนให้ตรงกับของคุณ
+// ══════════════════════════════════════════════
+const LIFF_ID = 'https://liff.line.me/2009606226-NChIakvk';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzrZt0orG7_m3Lp9IxQsydBmhSwji_ks456bjKvPbO747-S8mCGQHVrsyqEJHKYjcdd/exec';
+
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const state = {
+  lineUserId:    null,
+  lineProfile:   null,
+  phone:         '',
+  step:          1,
+  service:       null,
+  staff:         null,
+  date:          null,
+  timeSlot:      null,
+  calYear:       new Date().getFullYear(),
+  calMonth:      new Date().getMonth(),
+  services:      [],
+  staffs:        [],
+  myBookings:    [],
+  bookingFilter: 'all',
+};
+
+// ══════════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════════
+const TH_MONTHS   = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const TH_DAYS_FULL= ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+const SVC_ICONS   = { 'BIAB':'🌸','French':'🌸','Infill':'🔮','Gel':'💅','Acrylic':'💠','Pedicure':'🦶','Lux':'💎','Spa':'🙌','ต่อขนตา':'👁','Art':'🎨' };
+const STAFF_COLORS= ['#FF6B9D','#38BDF8','#A78BFA','#FBBF24','#2DD4BF','#F97316'];
+const STAFF_INIT  = ['∞','Al','Bi','Ch','Da','Iv'];
+
+// ══════════════════════════════════════════════
+// INIT LIFF
+// ══════════════════════════════════════════════
+async function initApp() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (!liff.isLoggedIn()) { liff.login(); return; }
+    const profile = await liff.getProfile();
+    state.lineProfile = profile;
+    state.lineUserId  = profile.userId;
+
+    document.getElementById('user-chip').style.display = 'flex';
+    document.getElementById('user-chip-name').textContent = profile.displayName;
+    if (profile.pictureUrl) {
+      document.getElementById('user-avatar').innerHTML = `<img src="${profile.pictureUrl}" alt="">`;
+    }
+
+    await apiCall('bk_registerCustomer', {
+      line_user_id:  profile.userId,
+      line_name:     profile.displayName,
+      profile_image: profile.pictureUrl || ''
+    });
+
+  } catch(err) {
+    console.warn('LIFF init failed (preview):', err.message);
+    state.lineProfile = { displayName: 'ตัวอย่าง ลูกค้า', userId: 'preview', pictureUrl: null };
+    state.lineUserId  = 'preview';
+    document.getElementById('user-chip').style.display = 'flex';
+    document.getElementById('user-chip-name').textContent = 'Preview Mode';
+  }
+
+  await Promise.all([ loadServices(), loadStaffs() ]);
+
+  document.getElementById('liff-profile-name').textContent = state.lineProfile.displayName;
+  if (state.lineProfile.pictureUrl) {
+    document.getElementById('liff-profile-ava').innerHTML = `<img src="${state.lineProfile.pictureUrl}" alt="">`;
+  }
+
+  setTimeout(() => document.getElementById('loading-screen').classList.add('out'), 700);
+}
+
+// ══════════════════════════════════════════════
+// API
+// ══════════════════════════════════════════════
+async function apiCall(action, params = {}) {
+  const qs  = new URLSearchParams({ action, ...params }).toString();
+  try {
+    const resp = await fetch(`${GAS_URL}?${qs}`, { cache: 'no-cache' });
+    return await resp.json();
+  } catch(e) {
+    console.error('API error:', e);
+    return { ok: false, error: e.message };
+  }
+}
+
+// ══════════════════════════════════════════════
+// SERVICES
+// ══════════════════════════════════════════════
+async function loadServices() {
+  const data = await apiCall('bk_getServices');
+  state.services = data.services || [];
+  renderServices();
+}
+
+function getSvcIcon(name) {
+  for (const k in SVC_ICONS) {
+    if (name.includes(k)) return SVC_ICONS[k];
+  }
+  return '💅';
+}
+
+function renderServices() {
+  const list = document.getElementById('service-list');
+  if (!state.services.length) {
+    list.innerHTML = '<div class="empty-state"><span class="empty-icon">🔍</span>ไม่พบข้อมูลบริการ</div>';
+    return;
+  }
+  list.innerHTML = state.services.map(s => `
+    <div class="service-card" id="sc_${s.id}" onclick="selectService('${s.id}')">
+      <div class="svc-icon-wrap">${getSvcIcon(s.name)}</div>
+      <div class="svc-info">
+        <div class="svc-name">${s.name}</div>
+        <div class="svc-meta">⏱ ${s.duration} นาที${s.description ? ' · ' + s.description.slice(0,22) : ''}</div>
+      </div>
+      <div class="svc-price">${s.price}<small>ประมาณ</small></div>
+      <div class="check-badge">✓</div>
+    </div>
+  `).join('');
+}
+
+function selectService(id) {
+  state.service = state.services.find(s => s.id === id);
+  document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('sc_' + id).classList.add('selected');
+  document.getElementById('bn-svc-name').textContent  = state.service.name;
+  document.getElementById('bn-svc-price').textContent = state.service.price;
+  document.getElementById('next-1').disabled = false;
+}
+
+// ══════════════════════════════════════════════
+// STAFFS
+// ══════════════════════════════════════════════
+async function loadStaffs() {
+  const data = await apiCall('bk_getStaffs');
+  state.staffs = data.staffs || [];
+  renderStaffs();
+}
+
+function renderStaffs() {
+  const grid = document.getElementById('staff-grid');
+  const list = [
+    { id:'stf_any', name:'ใครทำก็ได้', bio:'ระบบจัดช่างที่ว่างให้อัตโนมัติ', isAny:true },
+    ...state.staffs
+  ];
+  grid.innerHTML = list.map((s, i) => {
+    const col = STAFF_COLORS[i % STAFF_COLORS.length];
+    const ini = s.isAny ? '∞' : (STAFF_INIT[i] || s.name.slice(0,2));
+    return `
+    <div class="staff-card ${s.isAny ? 'any-card' : ''}" id="stc_${s.id}" onclick="selectStaff('${s.id}')">
+      <div class="staff-ava" style="${s.isAny ? '' : `background:linear-gradient(135deg,${col}22,${col}44);color:${col}`}">
+        ${s.image ? `<img src="${s.image}" alt="">` : ini}
+      </div>
+      <div style="flex:${s.isAny?1:'unset'}">
+        <div class="staff-name">${s.name}</div>
+        <div class="staff-role">${s.bio || (s.isAny ? 'อัตโนมัติ' : 'ช่างเล็บ')}</div>
+      </div>
+      <div class="staff-check">✓</div>
+    </div>`;
+  }).join('');
+}
+
+function selectStaff(id) {
+  const all = [{ id:'stf_any', name:'ใครทำก็ได้' }, ...state.staffs];
+  state.staff = all.find(s => s.id === id);
+  document.querySelectorAll('.staff-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('stc_' + id).classList.add('selected');
+  document.getElementById('next-2').disabled = false;
+}
+
+// ══════════════════════════════════════════════
+// CALENDAR
+// ══════════════════════════════════════════════
+function changeCalMonth(dir) {
+  state.calMonth += dir;
+  if (state.calMonth < 0)  { state.calMonth = 11; state.calYear--; }
+  if (state.calMonth > 11) { state.calMonth = 0;  state.calYear++; }
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const now     = new Date();
+  const today   = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const maxDate = new Date(today.getTime() + 30 * 86400000);
+
+  document.getElementById('cal-month-lbl').textContent =
+    TH_MONTHS[state.calMonth] + ' ' + (state.calYear + 543);
+
+  const grid     = document.getElementById('cal-grid');
+  const firstDay = new Date(state.calYear, state.calMonth, 1).getDay();
+  const lastDate = new Date(state.calYear, state.calMonth + 1, 0).getDate();
+
+  const dows = ['จ','อ','พ','พฤ','ศ','ส','อา'];
+  let html = dows.map(d => `<div class="cal-dow">${d}</div>`).join('');
+
+  let offset = firstDay === 0 ? 6 : firstDay - 1;
+  for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let d = 1; d <= lastDate; d++) {
+    const dt       = new Date(state.calYear, state.calMonth, d);
+    const isPast   = dt < today;
+    const isFuture = dt > maxDate;
+    const isToday  = dt.getTime() === today.getTime();
+    const isSel    = state.date && state.date.getTime() === dt.getTime();
+    const disabled = isPast || isFuture;
+    const cls = ['cal-day',
+      disabled ? 'disabled' : '',
+      isToday  ? 'today'    : '',
+      isSel    ? 'selected' : '',
+    ].filter(Boolean).join(' ');
+    html += `<div class="${cls}"${disabled ? '' : ` onclick="selectDate(${state.calYear},${state.calMonth},${d})"`}>${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+async function selectDate(y, m, d) {
+  state.date     = new Date(y, m, d);
+  state.timeSlot = null;
+  document.getElementById('next-3').disabled = true;
+  renderCalendar();
+
+  document.getElementById('time-slots-wrap').style.display = 'none';
+  document.getElementById('no-date-msg').style.display     = 'none';
+  document.getElementById('time-loading').style.display    = 'block';
+
+  const dateStr = y + '-' + String(m+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  const result  = await apiCall('bk_getAvailTimes', {
+    date:       dateStr,
+    staff_id:   state.staff   ? state.staff.id   : 'stf_any',
+    service_id: state.service ? state.service.id : ''
+  });
+
+  document.getElementById('time-loading').style.display = 'none';
+
+  if (!result.ok || !result.slots || !result.slots.length) {
+    const msg = document.getElementById('no-date-msg');
+    msg.textContent = '😔 ไม่มีช่วงเวลาว่างในวันนี้ค่ะ';
+    msg.style.display = 'block';
+    return;
+  }
+
+  renderTimeSlots(result.slots);
+  document.getElementById('time-slots-wrap').style.display = 'block';
+}
+
+function renderTimeSlots(slots) {
+  const morning   = slots.filter(s => parseInt(s.time) < 12);
+  const afternoon = slots.filter(s => parseInt(s.time) >= 12 && parseInt(s.time) < 16);
+  const evening   = slots.filter(s => parseInt(s.time) >= 16);
+
+  const makeSlot = s => {
+    const cls     = 'time-slot' + (!s.available ? ' unavailable' : '');
+    const onclick = s.available ? `onclick="selectTime('${s.time}','${s.endTime || ''}')"` : '';
+    return `<div class="${cls}" id="ts_${s.time.replace(':','_')}" ${onclick}>
+      ${s.time} น.<span class="time-end">${s.endTime ? s.endTime + ' น.' : ''}</span>
+    </div>`;
+  };
+
+  const empty = `<div style="color:var(--text3);font-size:13px;grid-column:1/-1;font-weight:500;padding:8px 0">ไม่มีเวลาว่างในช่วงนี้</div>`;
+  document.getElementById('slots-morning').innerHTML   = morning.length   ? morning.map(makeSlot).join('')   : empty;
+  document.getElementById('slots-afternoon').innerHTML = afternoon.length ? afternoon.map(makeSlot).join('') : empty;
+  document.getElementById('slots-evening').innerHTML   = evening.length   ? evening.map(makeSlot).join('')   : empty;
+}
+
+function selectTime(time, endTime) {
+  state.timeSlot = { time, endTime };
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  const el = document.getElementById('ts_' + time.replace(':','_'));
+  if (el) el.classList.add('selected');
+  document.getElementById('next-3').disabled = false;
+}
+
+// ══════════════════════════════════════════════
+// STEP NAV
+// ══════════════════════════════════════════════
+function goStep(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + n).classList.add('active');
+  const rail = document.getElementById('step-rail');
+  rail.style.display = n === 'mybk' ? 'none' : 'flex';
+  state.step = n;
+  window.scrollTo(0, 0);
+
+  if (n !== 'mybk') {
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('sr-' + i);
+      el.classList.remove('active','done');
+      if (i <  n) el.classList.add('done');
+      if (i === n) el.classList.add('active');
+    }
+  }
+  if (n === 4) buildSummary();
+}
+
+function goMyBookings() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-mybk').classList.add('active');
+  document.getElementById('step-rail').style.display = 'none';
+  window.scrollTo(0, 0);
+  loadMyBookings();
+}
+
+function buildSummary() {
+  const { service:svc, staff, date, timeSlot:slot } = state;
+  if (!svc || !staff || !date || !slot) return;
+
+  const dateStr = `วัน${TH_DAYS_FULL[date.getDay()]}ที่ ${date.getDate()} ${TH_MONTHS[date.getMonth()]} ${date.getFullYear()+543}`;
+  document.getElementById('sum-service').textContent  = svc.name;
+  document.getElementById('sum-staff').textContent    = staff.id === 'stf_any' ? 'ระบบจัดให้อัตโนมัติ' : staff.name;
+  document.getElementById('sum-date').textContent     = dateStr;
+  document.getElementById('sum-time').textContent     = slot.time + ' – ' + (slot.endTime || '?') + ' น.';
+  document.getElementById('sum-duration').textContent = svc.duration + ' นาที';
+  document.getElementById('sum-price').textContent    = svc.price;
+  if (state.phone) document.getElementById('phone-input').value = state.phone;
+}
+
+// ══════════════════════════════════════════════
+// SUBMIT
+// ══════════════════════════════════════════════
+async function submitBooking() {
+  const phone = document.getElementById('phone-input').value.replace(/\D/g,'');
+  const note  = document.getElementById('note-input').value;
+  const btn   = document.getElementById('confirm-btn');
+
+  if (!phone || phone.length < 9) {
+    document.getElementById('phone-input').classList.add('error');
+    showToast('⚠️ กรุณากรอกเบอร์โทรให้ถูกต้องค่ะ');
+    return;
+  }
+  document.getElementById('phone-input').classList.remove('error');
+  state.phone = phone;
+
+  btn.disabled    = true;
+  btn.textContent = '⏳ กำลังจองนัด...';
+
+  const date    = state.date;
+  const dateStr = date.getFullYear() + '-' +
+    String(date.getMonth()+1).padStart(2,'0') + '-' +
+    String(date.getDate()).padStart(2,'0');
+
+  const result = await apiCall('bk_createBooking', {
+    line_user_id:  state.lineUserId,
+    line_name:     state.lineProfile?.displayName || '-',
+    service_id:    state.service.id,
+    staff_id:      state.staff.id,
+    staff_name:    state.staff.name,
+    booking_date:  dateStr,
+    booking_start: state.timeSlot.time,
+    phone,
+    note
+  });
+
+  btn.disabled    = false;
+  btn.textContent = '💕 ยืนยันการจองนัด';
+
+  if (!result.ok) {
+    showToast('❌ ' + (result.error || 'เกิดข้อผิดพลาด'));
+    if (result.slotFull) { selectDate(date.getFullYear(), date.getMonth(), date.getDate()); goStep(3); }
+    return;
+  }
+
+  const dd = `${date.getDate()} ${TH_MONTHS[date.getMonth()]} ${date.getFullYear()+543}`;
+  document.getElementById('success-detail').innerHTML = `
+    <div class="success-card-row"><span class="sc-label">บริการ</span><span class="sc-value">${state.service.name}</span></div>
+    <div class="success-card-row"><span class="sc-label">ช่าง</span><span class="sc-value">${result.staff_name || state.staff.name}</span></div>
+    <div class="success-card-row"><span class="sc-label">วันที่</span><span class="sc-value">${dd}</span></div>
+    <div class="success-card-row"><span class="sc-label">เวลา</span><span class="sc-value">${state.timeSlot.time} – ${result.end_time || state.timeSlot.endTime} น.</span></div>
+    <div class="success-card-row"><span class="sc-label">โทรศัพท์</span><span class="sc-value">${phone}</span></div>
+  `;
+  document.getElementById('success-bk-id').textContent = 'Booking ID: ' + result.booking_id;
+  document.getElementById('success-screen').classList.add('show');
+}
+
+function closeWindow() {
+  try { liff.closeWindow(); } catch(e) { window.close(); }
+}
+
+// ══════════════════════════════════════════════
+// MY BOOKINGS
+// ══════════════════════════════════════════════
+async function loadMyBookings() {
+  const list = document.getElementById('mybk-list');
+  list.innerHTML = '<div style="height:120px;border-radius:20px;margin-bottom:12px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div><div style="height:120px;border-radius:20px;background:linear-gradient(90deg,#f0f4ff 25%,#e8eeff 50%,#f0f4ff 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;"></div>';
+
+  if (!state.lineUserId || state.lineUserId === 'preview') {
+    list.innerHTML = '<div class="empty-state"><span class="empty-icon">👋</span>กรุณาล็อกอินด้วย LINE ก่อนค่ะ</div>';
+    return;
+  }
+  const result = await apiCall('bk_getMyBookings', { line_user_id: state.lineUserId });
+  state.myBookings = result.bookings || [];
+  renderMyBookings();
+}
+
+function filterBookings(status, btn) {
+  state.bookingFilter = status;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderMyBookings();
+}
+
+function renderMyBookings() {
+  const list   = document.getElementById('mybk-list');
+  const filter = state.bookingFilter;
+  const items  = filter === 'all' ? state.myBookings : state.myBookings.filter(b => b.status === filter);
+
+  if (!items.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-icon">📭</span>${filter === 'all' ? 'ยังไม่มีการจองค่ะ' : 'ไม่พบการจองในหมวดนี้'}</div>`;
+    return;
+  }
+
+  const statusLabel = { pending:'รอยืนยัน', confirmed:'ยืนยันแล้ว', cancelled:'ยกเลิกแล้ว', completed:'เสร็จสิ้น' };
+  const statusCls   = { pending:'bk-pending', confirmed:'bk-confirmed', cancelled:'bk-cancelled', completed:'bk-completed' };
+
+  list.innerHTML = items.map(b => `
+    <div class="booking-item">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div class="bk-service">${b.service_name}</div>
+        <span class="bk-status ${statusCls[b.status]||'bk-pending'}">${statusLabel[b.status]||b.status}</span>
+      </div>
+      <div class="bk-details">
+        ✂️ ${b.staff_name} &nbsp;·&nbsp; 📆 ${b.date}<br>
+        ⏰ ${b.start} – ${b.end} น. (${b.duration} นาที)
+        ${b.note ? `<br>📝 ${b.note}` : ''}
+      </div>
+      ${(b.status==='pending'||b.status==='confirmed') ? `
+      <button class="bk-cancel-btn" onclick="cancelBooking('${b.id}',this)">ยกเลิกการจองนี้</button>` : ''}
+    </div>
+  `).join('');
+}
+
+async function cancelBooking(bookingId, btn) {
+  if (!confirm('ยืนยันการยกเลิกการจองนี้?')) return;
+  btn.disabled    = true;
+  btn.textContent = '⏳ กำลังยกเลิก...';
+  const result = await apiCall('bk_cancelBooking', { booking_id: bookingId, line_user_id: state.lineUserId });
+  if (result.ok) {
+    showToast('✅ ยกเลิกการจองแล้วค่ะ');
+    await loadMyBookings();
+  } else {
+    showToast('❌ ' + (result.error || 'เกิดข้อผิดพลาด'));
+    btn.disabled    = false;
+    btn.textContent = 'ยกเลิกการจองนี้';
+  }
+}
+
+// ══════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════
+let _tt;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderCalendar();
+  initApp();
+});
+</script>
+</body>
+</html>
